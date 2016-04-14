@@ -1,0 +1,15 @@
+{
+  "name": "jcore",
+  "version": "0.0.1",
+  "description": "JavaScript library for building UI components",
+  "main": "jcore.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ionstage/jcore.git"
+  },
+  "keywords": [
+    "component"
+  ],
+  "author": "iOnStage",
+  "license": "MIT"
+}
