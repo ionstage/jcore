@@ -90,13 +90,13 @@
 
   Relation.prototype.update = function() {};
 
-  var jcore = {
+  var jCore = {
     Component: Component,
     Relation: Relation
   };
 
   if (typeof module !== 'undefined' && module.exports)
-    module.exports = jcore;
+    module.exports = jCore;
   else
-    global.jcore = jcore;
+    global.jCore = jCore;
 })(this);
