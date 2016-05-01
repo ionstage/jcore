@@ -1,3 +1,9 @@
+/**
+ * jCore v0.1.0
+ * (c) 2016 iOnStage
+ * Released under the MIT License.
+ */
+
 (function(global) {
   'use strict';
 
