@@ -18,7 +18,7 @@ JavaScript library for building UI components
 
 #### Nested draggable box
 
-[Demo](https://jsfiddle.net/jfymqzhp/)
+[Demo](https://jsfiddle.net/cvewz2n8/)
 
 ![Screen Shot](assets/nested_draggable_box.png)
 
