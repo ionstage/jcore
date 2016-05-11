@@ -13,10 +13,6 @@
     };
   }
 
-  var identity = function(value) {
-    return value;
-  };
-
   var lastIndexOf = function(array, value) {
     for (var i = array.length - 1; i >= 0; i--) {
       if (array[i] === value)
@@ -31,10 +27,8 @@
   };
 
   Component.prototype.prop = function(initialValue, defaultValue, converter) {
-    if (typeof converter !== 'function')
-      converter = identity;
-
-    var cache = converter(initialValue, defaultValue);
+    var hasConverter = (typeof converter === 'function');
+    var cache = hasConverter ? converter(initialValue, defaultValue) : initialValue;
 
     return function(value) {
       if (typeof value === 'undefined')
@@ -43,7 +37,7 @@
       if (value === cache)
         return;
 
-      cache = converter(value, cache);
+      cache = hasConverter ? converter(value, cache) : value;
 
       this.markDirty();
     };
