@@ -1,6 +1,6 @@
 {
   "name": "jcore",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "JavaScript library for building UI components",
   "main": "jcore.js",
   "repository": {
