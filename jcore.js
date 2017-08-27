@@ -23,7 +23,7 @@
   };
 
   var Component = function() {
-    this.relations = this.prop([]);
+    this.relations = [];
   };
 
   Component.prototype.prop = function(initialValue, defaultValue, converter) {
@@ -52,7 +52,7 @@
     var updateRelations = function(index) {
       for (var ci = index, clen = dirtyComponents.length; ci < clen; ci++) {
         var component = dirtyComponents[ci];
-        var relations = component.relations();
+        var relations = component.relations;
 
         for (var ri = 0, rlen = relations.length; ri < rlen; ri++) {
           relations[ri].update(component);
