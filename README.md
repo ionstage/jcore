@@ -12,13 +12,13 @@ JavaScript library for building UI components
 
 #### Toggle switches
 
-[Demo](https://jsfiddle.net/etypesaj/)
+[Demo](https://jsfiddle.net/o5ynna4h/)
 
 ![Screen Shot](assets/toggle_switches.png)
 
 #### Nested draggable box
 
-[Demo](https://jsfiddle.net/cvewz2n8/)
+[Demo](https://jsfiddle.net/9e8h25ur/)
 
 ![Screen Shot](assets/nested_draggable_box.png)
 
