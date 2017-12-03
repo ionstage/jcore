@@ -15,10 +15,19 @@ describe('Component', function() {
     });
   });
 
+  describe('#parentElement', function() {
+    it('should return parent element object', function() {
+      var e = { parentNode: {} };
+      var C = jCore.Component.inherits();
+      var c = new C({ element: e });
+      assert.equal(c.parentElement(), e.parentNode);
+    });
+  });
+
   describe('#render', function() {
     it('should call without element property', function() {
       var C = jCore.Component.inherits();
-      C.prototype.render = sinon.spy();
+      C.prototype.render = sinon.spy(jCore.Component.prototype.render);
       var c = new C();
       assert(c.render.called);
     });
