@@ -23,7 +23,6 @@
         configurable: true,
       },
     });
-    return ctor;
   };
 
   var lastIndexOf = function(array, value) {
@@ -113,7 +112,7 @@
 
   Component.inherits = function(initializer) {
     var superCtor = this;
-    var ctor = inherits(function() {
+    var ctor = function() {
       var props = (arguments.length !== 0 ? arguments[0] : {});
       superCtor.call(this, props);
       if (typeof initializer === 'function') {
@@ -122,7 +121,8 @@
       if (this.constructor === ctor) {
         this.oninit();
       }
-    }, superCtor);
+    };
+    inherits(ctor, superCtor);
     ctor.inherits = superCtor.inherits;
     return ctor;
   };
