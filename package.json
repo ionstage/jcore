@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "description": "JavaScript library for building UI components",
   "main": "jcore.js",
+  "scripts": {
+    "test": "mocha"
+  },
   "devDependencies": {
     "mocha": "^4.0.1",
     "sinon": "^4.1.2"

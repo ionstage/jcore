@@ -13,6 +13,19 @@
     };
   }
 
+  var inherits = function(ctor, superCtor) {
+    ctor.super_ = superCtor;
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true,
+      },
+    });
+    return ctor;
+  };
+
   var lastIndexOf = function(array, value) {
     for (var i = array.length - 1; i >= 0; i--) {
       if (array[i] === value) {
@@ -81,6 +94,24 @@
       requestId = global.requestAnimationFrame(callback);
     };
   })();
+
+  Component.prototype.oninit = function() {};
+
+  Component.inherits = function(initializer) {
+    var superCtor = this;
+    var ctor = inherits(function() {
+      var props = (arguments.length !== 0 ? arguments[0] : {});
+      superCtor.call(this, props);
+      if (typeof initializer === 'function') {
+        initializer.call(this, props);
+      }
+      if (this.constructor === ctor) {
+        this.oninit();
+      }
+    }, superCtor);
+    ctor.inherits = superCtor.inherits;
+    return ctor;
+  };
 
   var Relation = function() {};
 
