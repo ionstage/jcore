@@ -35,7 +35,16 @@
     return -1;
   };
 
-  var Component = function() {
+  var render = function(s) {
+    var parent = document.createElement('div');
+    parent.innerHTML = s;
+    var el = parent.firstChild;
+    parent.removeChild(el);
+    return el;
+  };
+
+  var Component = function(props) {
+    this.element = this.prop(props.element || this.render());
     this.relations = [];
   };
 
@@ -94,6 +103,10 @@
       requestId = global.requestAnimationFrame(callback);
     };
   })();
+
+  Component.prototype.render = function() {
+    return render('<div></div>');
+  };
 
   Component.prototype.oninit = function() {};
 
