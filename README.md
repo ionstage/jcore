@@ -6,7 +6,7 @@ JavaScript library for building UI components
 
 - Small, simple, and just JavaScript
 - Standalone, no dependencies
-- Cross-browser: works on IE6+, Firefox, Safari, Chrome, Opera
+- Cross-browser: works on IE9+, Firefox, Safari, Chrome, Opera
 
 ## Example
 
