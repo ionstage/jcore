@@ -2,6 +2,8 @@ var assert = require('assert');
 var jsdom = require('jsdom');
 var sinon = require('sinon');
 var jCore = require('../jcore.js');
+var Component = jCore.Component;
+var Relation = jCore.Relation;
 
 global.document = (new jsdom.JSDOM()).window.document;
 
@@ -9,7 +11,7 @@ describe('Component', function() {
   describe('#element', function() {
     it('should return element object', function() {
       var e = {};
-      var C = jCore.Component.inherits();
+      var C = Component.inherits();
       var c = new C({ element: e });
       assert.equal(c.element(), e);
     });
@@ -18,7 +20,7 @@ describe('Component', function() {
   describe('#parentElement', function() {
     it('should return parent element object', function() {
       var e = { parentNode: {} };
-      var C = jCore.Component.inherits();
+      var C = Component.inherits();
       var c = new C({ element: e });
       assert.equal(c.parentElement(), e.parentNode);
     });
@@ -26,7 +28,7 @@ describe('Component', function() {
 
   describe('#markDirty', function() {
     it('should call redraw() of component', function(done) {
-      var C = jCore.Component.inherits();
+      var C = Component.inherits();
       var c = new C();
       c.redraw = sinon.spy(done);
       c.markDirty();
@@ -35,8 +37,8 @@ describe('Component', function() {
 
   describe('#render', function() {
     it('should call without element property', function() {
-      var C = jCore.Component.inherits();
-      C.prototype.render = sinon.spy(jCore.Component.prototype.render);
+      var C = Component.inherits();
+      C.prototype.render = sinon.spy(Component.prototype.render);
       var c = new C();
       assert(c.render.called);
     });
@@ -44,7 +46,7 @@ describe('Component', function() {
 
   describe('#oninit', function() {
     it('should call on initialization', function() {
-      var C = jCore.Component.inherits(function() {
+      var C = Component.inherits(function() {
         this.oninit = sinon.spy();
       });
       var c = new C();
@@ -54,15 +56,15 @@ describe('Component', function() {
 
   describe('.main', function() {
     it('should mark dirty component', function() {
-      var C = jCore.Component.inherits();
+      var C = Component.inherits();
       var c = new C();
       c.markDirty();
-      assert.equal(jCore.Component.main.dirtyComponents[0], c);
-      assert.notEqual(jCore.Component.main.requestID, 0);
+      assert.equal(Component.main.dirtyComponents[0], c);
+      assert.notEqual(Component.main.requestID, 0);
     });
 
     it('update components', function(done) {
-      var C = jCore.Component.inherits();
+      var C = Component.inherits();
       var c0 = new C();
       var c1 = new C();
       var c2 = new C();
@@ -75,9 +77,9 @@ describe('Component', function() {
 
   describe('.inherits', function() {
     it('should return constructor', function() {
-      var C = jCore.Component.inherits();
+      var C = Component.inherits();
       var c = new C();
-      assert(c instanceof jCore.Component);
+      assert(c instanceof Component);
     });
   });
 });
