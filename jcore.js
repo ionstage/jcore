@@ -41,7 +41,7 @@
 
   Component.prototype.prop = function(initialValue, defaultValue, converter) {
     var hasConverter = (typeof converter === 'function');
-    var cache = hasConverter ? converter(initialValue, defaultValue) : initialValue;
+    var cache = (hasConverter ? converter(initialValue, defaultValue) : initialValue);
     return function(value) {
       if (typeof value === 'undefined') {
         return cache;
@@ -49,7 +49,7 @@
       if (value === cache) {
         return;
       }
-      cache = hasConverter ? converter(value, cache) : value;
+      cache = (hasConverter ? converter(value, cache) : value);
       this.markDirty();
     };
   };
@@ -128,7 +128,7 @@
 
   var jCore = {
     Component: Component,
-    Relation: Relation
+    Relation: Relation,
   };
 
   if (typeof module !== 'undefined' && module.exports) {
