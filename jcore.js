@@ -57,7 +57,7 @@
   Component.prototype.redraw = function() {};
 
   Component.prototype.markDirty = function() {
-    Component.markDirty(this);
+    Component.main.markDirty(this);
   };
 
   Component.prototype.render = function() {
@@ -66,13 +66,25 @@
 
   Component.prototype.oninit = function() {};
 
-  Component.markDirty = (function() {
-    var dirtyComponents = [];
-    var requestId = null;
+  Component.main = (function() {
+    var Main = function() {
+      this.dirtyComponents = [];
+      this.requestID = 0;
+    };
 
-    var updateRelations = function(index) {
-      for (var ci = index, clen = dirtyComponents.length; ci < clen; ci++) {
-        var component = dirtyComponents[ci];
+    Main.prototype.markDirty = function(component) {
+      if (lastIndexOf(this.dirtyComponents, component)) {
+        this.dirtyComponents.push(component);
+      }
+      if (this.requestID) {
+        return;
+      }
+      this.requestID = global.requestAnimationFrame(this.onanimate.bind(this));
+    };
+
+    Main.prototype.update = function(index) {
+      for (var ci = index, clen = this.dirtyComponents.length; ci < clen; ci++) {
+        var component = this.dirtyComponents[ci];
         var relations = component.relations;
         for (var ri = 0, rlen = relations.length; ri < rlen; ri++) {
           relations[ri].update(component);
@@ -80,29 +92,21 @@
       }
 
       // may be inserted other dirty components by updating relations
-      if (dirtyComponents.length > clen) {
-        updateRelations(clen);
+      if (this.dirtyComponents.length > clen) {
+        this.update(clen);
       }
     };
 
-    var callback = function() {
-      updateRelations(0);
-      for (var i = 0, len = dirtyComponents.length; i < len; i++) {
-        dirtyComponents[i].redraw();
+    Main.prototype.onanimate = function() {
+      this.update(0);
+      for (var i = 0, len = this.dirtyComponents.length; i < len; i++) {
+        this.dirtyComponents[i].redraw();
       }
-      dirtyComponents = [];
-      requestId = null;
+      this.dirtyComponents = [];
+      this.requestID = 0;
     };
 
-    return function(component) {
-      if (lastIndexOf(dirtyComponents, component) === -1) {
-        dirtyComponents.push(component);
-      }
-      if (requestId !== null) {
-        return;
-      }
-      requestId = global.requestAnimationFrame(callback);
-    };
+    return new Main();
   })();
 
   Component.inherits = function(initializer) {

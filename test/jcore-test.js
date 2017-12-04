@@ -52,6 +52,27 @@ describe('Component', function() {
     });
   });
 
+  describe('.main', function() {
+    it('should mark dirty component', function() {
+      var C = jCore.Component.inherits();
+      var c = new C();
+      c.markDirty();
+      assert.equal(jCore.Component.main.dirtyComponents[0], c);
+      assert.notEqual(jCore.Component.main.requestID, 0);
+    });
+
+    it('update components', function(done) {
+      var C = jCore.Component.inherits();
+      var c0 = new C();
+      var c1 = new C();
+      var c2 = new C();
+      c0.relations = [{ update: sinon.spy(function() { c1.markDirty(); }) }];
+      c1.relations = [{ update: sinon.spy(function() { c2.markDirty(); }) }];
+      c2.redraw = sinon.spy(done);
+      c0.markDirty();
+    });
+  });
+
   describe('.inherits', function() {
     it('should return constructor', function() {
       var C = jCore.Component.inherits();
