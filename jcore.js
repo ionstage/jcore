@@ -124,7 +124,7 @@
 
   var Relation = function() {};
 
-  Relation.prototype.update = function() {};
+  Relation.prototype.update = function(component) {};
 
   var jCore = {
     Component: Component,
