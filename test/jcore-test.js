@@ -24,6 +24,15 @@ describe('Component', function() {
     });
   });
 
+  describe('#markDirty', function() {
+    it('should call redraw() of component', function(done) {
+      var C = jCore.Component.inherits();
+      var c = new C();
+      c.redraw = sinon.spy(done);
+      c.markDirty();
+    });
+  });
+
   describe('#render', function() {
     it('should call without element property', function() {
       var C = jCore.Component.inherits();

@@ -57,7 +57,17 @@
 
   Component.prototype.redraw = function() {};
 
-  Component.prototype.markDirty = (function() {
+  Component.prototype.markDirty = function() {
+    Component.markDirty(this);
+  };
+
+  Component.prototype.render = function() {
+    return document.createElement('div');
+  };
+
+  Component.prototype.oninit = function() {};
+
+  Component.markDirty = (function() {
     var dirtyComponents = [];
     var requestId = null;
 
@@ -85,9 +95,9 @@
       requestId = null;
     };
 
-    return function() {
-      if (lastIndexOf(dirtyComponents, this) === -1) {
-        dirtyComponents.push(this);
+    return function(component) {
+      if (lastIndexOf(dirtyComponents, component) === -1) {
+        dirtyComponents.push(component);
       }
       if (requestId !== null) {
         return;
@@ -95,12 +105,6 @@
       requestId = global.requestAnimationFrame(callback);
     };
   })();
-
-  Component.prototype.render = function() {
-    return document.createElement('div');
-  };
-
-  Component.prototype.oninit = function() {};
 
   Component.inherits = function(initializer) {
     var superCtor = this;
