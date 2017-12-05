@@ -30,9 +30,8 @@
     this.relations = [];
   };
 
-  Component.prototype.prop = function(initialValue, defaultValue, converter) {
-    var hasConverter = (typeof converter === 'function');
-    var cache = (hasConverter ? converter(initialValue, defaultValue) : initialValue);
+  Component.prototype.prop = function(initialValue) {
+    var cache = initialValue;
     return function(value) {
       if (typeof value === 'undefined') {
         return cache;
@@ -40,7 +39,7 @@
       if (value === cache) {
         return;
       }
-      cache = (hasConverter ? converter(value, cache) : value);
+      cache = value;
       this.markDirty();
     };
   };
