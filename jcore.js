@@ -24,15 +24,6 @@
     });
   };
 
-  var lastIndexOf = function(array, value) {
-    for (var i = array.length - 1; i >= 0; i--) {
-      if (array[i] === value) {
-        return i;
-      }
-    }
-    return -1;
-  };
-
   var Component = function(props) {
     this.element = this.prop(props.element || this.render());
     this.parentElement = this.prop(this.element().parentNode);
@@ -73,7 +64,7 @@
     };
 
     Main.prototype.markDirty = function(component) {
-      if (lastIndexOf(this.dirtyComponents, component) === -1) {
+      if (this.dirtyComponents.lastIndexOf(component) === -1) {
         this.dirtyComponents.push(component);
       }
       if (this.requestID) {
