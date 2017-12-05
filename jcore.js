@@ -73,7 +73,7 @@
     };
 
     Main.prototype.markDirty = function(component) {
-      if (lastIndexOf(this.dirtyComponents, component)) {
+      if (lastIndexOf(this.dirtyComponents, component) === -1) {
         this.dirtyComponents.push(component);
       }
       if (this.requestID) {

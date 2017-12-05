@@ -8,6 +8,11 @@ var Relation = jCore.Relation;
 global.document = (new jsdom.JSDOM()).window.document;
 
 describe('Component', function() {
+  beforeEach(function() {
+    Component.main.dirtyComponents = [];
+    Component.main.requestID = 0;
+  });
+
   describe('#element', function() {
     it('should return element object', function() {
       var e = {};
@@ -32,6 +37,16 @@ describe('Component', function() {
       var c = new C();
       c.redraw = sinon.spy(done);
       c.markDirty();
+    });
+
+    it('should not add dirty component twice', function() {
+      var C = Component.inherits();
+      var c0 = new C();
+      var c1 = new C();
+      c0.markDirty();
+      c1.markDirty();
+      c1.markDirty();
+      assert.equal(Component.main.dirtyComponents.length, 2);
     });
   });
 
