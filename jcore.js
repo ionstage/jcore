@@ -48,6 +48,12 @@
     };
   };
 
+  Component.prototype.addRelation = function(relation) {
+    if (this.relations.indexOf(relation) === -1) {
+      this.relations.push(relation);
+    }
+  };
+
   Component.prototype.redraw = function() {};
 
   Component.prototype.markDirty = function() {

@@ -41,6 +41,16 @@ describe('Component', function() {
     });
   });
 
+  describe('#addRelation', function() {
+    it('should append relation object', function() {
+      var C = Component.inherits();
+      var c = new C();
+      var r = {};
+      c.addRelation(r);
+      assert.equal(c.relations[0], r);
+    });
+  });
+
   describe('#markDirty', function() {
     it('should call redraw() of component', function(done) {
       var C = Component.inherits();
