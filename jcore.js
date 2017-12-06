@@ -30,6 +30,10 @@
     this.relations = [];
   };
 
+  Component.prototype.findElement = function(selectors) {
+    return this.element().querySelector(selectors);
+  };
+
   Component.prototype.prop = function(initialValue) {
     var cache = initialValue;
     return function(value) {

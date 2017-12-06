@@ -31,6 +31,16 @@ describe('Component', function() {
     });
   });
 
+  describe('#findElement', function() {
+    it('should return child element object', function() {
+      var C = Component.inherits();
+      var c = new C();
+      var e = c.element();
+      e.innerHTML = '<div class="test"></div>';
+      assert.equal(c.findElement('.test'), e.children[0]);
+    });
+  });
+
   describe('#markDirty', function() {
     it('should call redraw() of component', function(done) {
       var C = Component.inherits();
