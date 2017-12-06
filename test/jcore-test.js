@@ -51,6 +51,17 @@ describe('Component', function() {
     });
   });
 
+  describe('#removeRelation', function() {
+    it('should remove relation object', function() {
+      var C = Component.inherits();
+      var c = new C();
+      var r = {};
+      c.addRelation(r);
+      c.removeRelation(r);
+      assert.equal(c.relations.length, 0);
+    });
+  });
+
   describe('#markDirty', function() {
     it('should call redraw() of component', function(done) {
       var C = Component.inherits();

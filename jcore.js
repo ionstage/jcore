@@ -54,6 +54,13 @@
     }
   };
 
+  Component.prototype.removeRelation = function(relation) {
+    var index = this.relations.indexOf(relation);
+    if (index !== -1) {
+      this.relations.splice(index, 1);
+    }
+  };
+
   Component.prototype.redraw = function() {};
 
   Component.prototype.markDirty = function() {
