@@ -29,6 +29,7 @@
     this.parentElement = this.prop(this.element().parentNode);
     this.relations = [];
     this.cache = {};
+    this.listeners = {};
   };
 
   Component.prototype.findElement = function(selectors) {
@@ -59,6 +60,25 @@
     var index = this.relations.indexOf(relation);
     if (index !== -1) {
       this.relations.splice(index, 1);
+    }
+  };
+
+  Component.prototype.on = function(type, listener) {
+    if (!this.listeners[type]) {
+      this.listeners[type] = [];
+    }
+    this.listeners[type].push(listener);
+  };
+
+  Component.prototype.emit = function() {
+    var args = Array.prototype.slice.call(arguments);
+    var type = args.shift();
+    var listeners = this.listeners[type];
+    if (!listeners) {
+      return;
+    }
+    for (var i = 0, len = listeners.length; i < len; i++) {
+      listeners[i].apply(this, args);
     }
   };
 

@@ -62,6 +62,27 @@ describe('Component', function() {
     });
   });
 
+  describe('#on', function() {
+    it('should register listener', function() {
+      var C = Component.inherits();
+      var c = new C();
+      var l = function() {};
+      c.on('test', l);
+      assert.equal(c.listeners.test[0], l);
+    });
+  });
+
+  describe('#emit', function() {
+    it('should call registered listener', function() {
+      var C = Component.inherits();
+      var c = new C();
+      var l = sinon.spy();
+      c.on('test', l);
+      c.emit('test', 0, 1);
+      assert(l.calledWith(0, 1));
+    });
+  });
+
   describe('#redrawBy', function() {
     it('should call callback function on context of its method', function() {
       var C = Component.inherits(function() {
