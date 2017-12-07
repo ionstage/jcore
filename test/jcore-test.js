@@ -83,6 +83,30 @@ describe('Component', function() {
     });
   });
 
+  describe('#removeAllListeners', function() {
+    it('should remove listeners of the specified type', function() {
+      var C = Component.inherits();
+      var c = new C();
+      c.on('test', function() {});
+      c.on('test', function() {});
+      c.on('test2', function() {});
+      c.removeAllListeners('test');
+      assert(!c.listeners.test);
+      assert.equal(c.listeners.test2.length, 1);
+    });
+
+    it('should remove all listeners', function() {
+      var C = Component.inherits();
+      var c = new C();
+      c.on('test', function() {});
+      c.on('test', function() {});
+      c.on('test2', function() {});
+      c.removeAllListeners();
+      assert(!c.listeners.test);
+      assert(!c.listeners.test2);
+    });
+  });
+
   describe('#redrawBy', function() {
     it('should call callback function on context of its method', function() {
       var C = Component.inherits(function() {

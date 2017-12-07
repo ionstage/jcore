@@ -82,6 +82,14 @@
     }
   };
 
+  Component.prototype.removeAllListeners = function(type) {
+    if (this.listeners[type]) {
+      delete this.listeners[type];
+    } else {
+      this.listeners = {};
+    }
+  };
+
   Component.prototype.redraw = function() {};
 
   Component.prototype.redrawBy = function() {
