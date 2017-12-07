@@ -62,6 +62,47 @@ describe('Component', function() {
     });
   });
 
+  describe('#redrawBy', function() {
+    it('should call callback function on context of its method', function() {
+      var C = Component.inherits(function() {
+        this.a = this.prop(0);
+        this.b = this.prop(0);
+      });
+      var c = new C();
+      c.a(1);
+      var callback = sinon.spy(function(a, b) {
+        assert.equal(a, this.a());
+        assert.equal(b, this.b());
+      });
+      c.redrawBy('a', 'b', callback);
+      assert(callback.called);
+    });
+
+    it('should not call callback function without changing', function() {
+      var C = Component.inherits(function() {
+        this.a = this.prop(0);
+      });
+      var c = new C();
+      c.cache.a = 0;
+      var callback = sinon.spy();
+      c.redrawBy('a', callback);
+      assert(callback.notCalled);
+    });
+
+    it('should update cache', function() {
+      var C = Component.inherits(function() {
+        this.a = this.prop(0);
+      });
+      var c = new C();
+      c.a(1);
+      assert.notEqual(c.cache.a, 1);
+      c.redrawBy('a', function() {
+        assert.equal(c.cache.a, 1);
+      });
+      assert.equal(c.cache.a, 1);
+    });
+  });
+
   describe('#markDirty', function() {
     it('should call redraw() of component', function(done) {
       var C = Component.inherits();

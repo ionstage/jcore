@@ -28,6 +28,7 @@
     this.element = this.prop(props.element || this.render());
     this.parentElement = this.prop(this.element().parentNode);
     this.relations = [];
+    this.cache = {};
   };
 
   Component.prototype.findElement = function(selectors) {
@@ -62,6 +63,25 @@
   };
 
   Component.prototype.redraw = function() {};
+
+  Component.prototype.redrawBy = function() {
+    var args = Array.prototype.slice.call(arguments);
+    var callback = args.pop();
+    var isChanged = false;
+    var values = [];
+    for (var i = 0, len = args.length; i < len; i++) {
+      var key = args[i];
+      var value = this[key]();
+      if (value !== this.cache[key]) {
+        this.cache[key] = value;
+        isChanged = true;
+      }
+      values.push(value);
+    }
+    if (isChanged) {
+      callback.apply(this, values);
+    }
+  };
 
   Component.prototype.markDirty = function() {
     Component.main.markDirty(this);
