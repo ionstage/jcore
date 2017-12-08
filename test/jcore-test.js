@@ -4,6 +4,7 @@ var sinon = require('sinon');
 var jCore = require('../jcore.js');
 var Component = jCore.Component;
 var Relation = jCore.Relation;
+var Draggable = jCore.Draggable;
 
 global.document = (new jsdom.JSDOM()).window.document;
 
@@ -237,6 +238,16 @@ describe('Relation', function() {
       var R = Relation.inherits();
       var r = new R();
       assert(r instanceof Relation);
+    });
+  });
+});
+
+describe('Draggable', function() {
+  describe('.inherits', function() {
+    it('should return constructor', function() {
+      var D = Draggable.inherits();
+      var d = new D();
+      assert(d instanceof Draggable);
     });
   });
 });

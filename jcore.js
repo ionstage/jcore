@@ -214,9 +214,24 @@
     return ctor;
   };
 
+  var Draggable = function() {};
+
+  Draggable.inherits = function(initializer) {
+    var superCtor = this;
+    var ctor = function() {
+      if (typeof initializer === 'function') {
+        var props = (arguments.length !== 0 ? arguments[0] : {});
+        initializer.call(this, props);
+      }
+    };
+    inherits(ctor, superCtor);
+    return ctor;
+  };
+
   var jCore = {
     Component: Component,
     Relation: Relation,
+    Draggable: Draggable,
   };
 
   if (typeof module !== 'undefined' && module.exports) {
