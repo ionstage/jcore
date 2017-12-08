@@ -90,7 +90,18 @@
     }
   };
 
-  Component.prototype.redraw = function() {};
+  Component.prototype.redraw = function() {
+    var element = this.element();
+    var parentElement = this.parentElement();
+    this.onredraw();
+    if (parentElement && parentElement !== element.parentNode) {
+      this.onappend();
+      parentElement.appendChild(element);
+    } else if (!parentElement && element.parentNode) {
+      this.onremove();
+      element.parentNode.removeChild(element);
+    }
+  };
 
   Component.prototype.redrawBy = function() {
     var args = Array.prototype.slice.call(arguments);
@@ -120,6 +131,12 @@
   };
 
   Component.prototype.oninit = function() {};
+
+  Component.prototype.onappend = function() {};
+
+  Component.prototype.onremove = function() {};
+
+  Component.prototype.onredraw = function() {};
 
   Component.main = (function() {
     var Main = function() {

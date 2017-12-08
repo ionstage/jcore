@@ -107,6 +107,39 @@ describe('Component', function() {
     });
   });
 
+  describe('#redraw', function() {
+    it('should call onredraw()', function() {
+      var C = Component.inherits();
+      var c = new C();
+      c.onredraw = sinon.spy();
+      c.redraw();
+      assert(c.onredraw.called);
+    });
+
+    it('should append element', function() {
+      var C = Component.inherits();
+      var c = new C();
+      var p = document.createElement('div');
+      c.onappend = sinon.spy();
+      c.parentElement(p);
+      c.redraw();
+      assert(c.onappend.called);
+      assert.equal(c.element().parentNode, p);
+    });
+
+    it('should remove element', function() {
+      var C = Component.inherits();
+      var c = new C();
+      var p = document.createElement('div');
+      p.appendChild(c.element());
+      c.onremove = sinon.spy();
+      c.parentElement(null);
+      c.redraw();
+      assert(c.onremove.called);
+      assert(!c.element().parentNode);
+    });
+  });
+
   describe('#redrawBy', function() {
     it('should call callback function on context of its method', function() {
       var C = Component.inherits(function() {
