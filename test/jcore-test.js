@@ -14,8 +14,8 @@ describe('Component', function() {
   });
 
   describe('#element', function() {
-    it('should return element object', function() {
-      var e = {};
+    it('should return element', function() {
+      var e = document.createElement('div');
       var C = Component.inherits();
       var c = new C({ element: e });
       assert.equal(c.element(), e);
@@ -23,16 +23,18 @@ describe('Component', function() {
   });
 
   describe('#parentElement', function() {
-    it('should return parent element object', function() {
-      var e = { parentNode: {} };
+    it('should return parent element', function() {
+      var e = document.createElement('div');
+      var p = document.createElement('div');
+      p.appendChild(e);
       var C = Component.inherits();
       var c = new C({ element: e });
-      assert.equal(c.parentElement(), e.parentNode);
+      assert.equal(c.parentElement(), p);
     });
   });
 
   describe('#findElement', function() {
-    it('should return child element object', function() {
+    it('should return child element', function() {
       var C = Component.inherits();
       var c = new C();
       var e = c.element();
@@ -42,20 +44,20 @@ describe('Component', function() {
   });
 
   describe('#addRelation', function() {
-    it('should append relation object', function() {
+    it('should append relation', function() {
       var C = Component.inherits();
       var c = new C();
-      var r = {};
+      var r = new Relation();
       c.addRelation(r);
       assert.equal(c.relations[0], r);
     });
   });
 
   describe('#removeRelation', function() {
-    it('should remove relation object', function() {
+    it('should remove relation', function() {
       var C = Component.inherits();
       var c = new C();
-      var r = {};
+      var r = new Relation();
       c.addRelation(r);
       c.removeRelation(r);
       assert.equal(c.relations.length, 0);
@@ -233,8 +235,12 @@ describe('Component', function() {
       var c0 = new C();
       var c1 = new C();
       var c2 = new C();
-      c0.relations = [{ update: sinon.spy(function() { c1.markDirty(); }) }];
-      c1.relations = [{ update: sinon.spy(function() { c2.markDirty(); }) }];
+      var r0 = new Relation();
+      var r1 = new Relation();
+      r0.update = function() { c1.markDirty(); };
+      r1.update = function() { c2.markDirty(); };
+      c0.relations = [r0];
+      c1.relations = [r1];
       c2.redraw = sinon.spy(done);
       c0.markDirty();
     });
