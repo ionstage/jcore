@@ -16,8 +16,7 @@ describe('Component', function() {
   describe('#element', function() {
     it('should return element', function() {
       var e = document.createElement('div');
-      var C = Component.inherits();
-      var c = new C({ element: e });
+      var c = new Component({ element: e });
       assert.equal(c.element(), e);
     });
   });
@@ -27,17 +26,15 @@ describe('Component', function() {
       var e = document.createElement('div');
       var p = document.createElement('div');
       p.appendChild(e);
-      var C = Component.inherits();
-      var c = new C({ element: e });
+      var c = new Component({ element: e });
       assert.equal(c.parentElement(), p);
     });
   });
 
   describe('#findElement', function() {
     it('should return child element', function() {
-      var C = Component.inherits();
-      var c = new C();
-      var e = c.element();
+      var e = document.createElement('div');
+      var c = new Component({ element: e });
       e.innerHTML = '<div class="test"></div>';
       assert.equal(c.findElement('.test'), e.children[0]);
     });
@@ -45,8 +42,7 @@ describe('Component', function() {
 
   describe('#addRelation', function() {
     it('should append relation', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       var r = new Relation();
       c.addRelation(r);
       assert.equal(c.relations[0], r);
@@ -55,8 +51,7 @@ describe('Component', function() {
 
   describe('#removeRelation', function() {
     it('should remove relation', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       var r = new Relation();
       c.addRelation(r);
       c.removeRelation(r);
@@ -66,8 +61,7 @@ describe('Component', function() {
 
   describe('#on', function() {
     it('should register listener', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       var l = function() {};
       c.on('test', l);
       assert.equal(c.listeners.test[0], l);
@@ -76,8 +70,7 @@ describe('Component', function() {
 
   describe('#emit', function() {
     it('should call registered listener', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       var l = sinon.spy();
       c.on('test', l);
       c.emit('test', 0, 1);
@@ -87,8 +80,7 @@ describe('Component', function() {
 
   describe('#removeAllListeners', function() {
     it('should remove listeners of the specified type', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       c.on('test', function() {});
       c.on('test', function() {});
       c.on('test2', function() {});
@@ -98,8 +90,7 @@ describe('Component', function() {
     });
 
     it('should remove all listeners', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       c.on('test', function() {});
       c.on('test', function() {});
       c.on('test2', function() {});
@@ -111,16 +102,14 @@ describe('Component', function() {
 
   describe('#redraw', function() {
     it('should call onredraw()', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       c.onredraw = sinon.spy();
       c.redraw();
       assert(c.onredraw.called);
     });
 
     it('should append element', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       var p = document.createElement('div');
       c.onappend = sinon.spy();
       c.parentElement(p);
@@ -130,8 +119,7 @@ describe('Component', function() {
     });
 
     it('should remove element', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       var p = document.createElement('div');
       p.appendChild(c.element());
       c.onremove = sinon.spy();
@@ -144,11 +132,9 @@ describe('Component', function() {
 
   describe('#redrawBy', function() {
     it('should call callback function on context of its method', function() {
-      var C = Component.inherits(function() {
-        this.a = this.prop(0);
-        this.b = this.prop(0);
-      });
-      var c = new C();
+      var c = new Component({});
+      c.a = c.prop(0);
+      c.b = c.prop(0);
       c.a(1);
       var callback = sinon.spy(function(a, b) {
         assert.equal(a, this.a());
@@ -159,10 +145,8 @@ describe('Component', function() {
     });
 
     it('should not call callback function without changing', function() {
-      var C = Component.inherits(function() {
-        this.a = this.prop(0);
-      });
-      var c = new C();
+      var c = new Component({});
+      c.a = c.prop(0);
       c.cache.a = 0;
       var callback = sinon.spy();
       c.redrawBy('a', callback);
@@ -170,10 +154,8 @@ describe('Component', function() {
     });
 
     it('should update cache', function() {
-      var C = Component.inherits(function() {
-        this.a = this.prop(0);
-      });
-      var c = new C();
+      var c = new Component({});
+      c.a = c.prop(0);
       c.a(1);
       assert.notEqual(c.cache.a, 1);
       c.redrawBy('a', function() {
@@ -185,16 +167,14 @@ describe('Component', function() {
 
   describe('#markDirty', function() {
     it('should call redraw() of component', function(done) {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       c.redraw = sinon.spy(done);
       c.markDirty();
     });
 
     it('should not add dirty component twice', function() {
-      var C = Component.inherits();
-      var c0 = new C();
-      var c1 = new C();
+      var c0 = new Component({});
+      var c1 = new Component({});
       c0.markDirty();
       c1.markDirty();
       c1.markDirty();
@@ -204,18 +184,16 @@ describe('Component', function() {
 
   describe('#render', function() {
     it('should call without element property', function() {
-      var C = Component.inherits();
-      C.prototype.render = sinon.spy(Component.prototype.render);
-      var c = new C();
+      Component.prototype.render = sinon.spy(Component.prototype.render);
+      var c = new Component({});
       assert(c.render.called);
     });
   });
 
   describe('#oninit', function() {
     it('should call on initialization', function() {
-      var C = Component.inherits(function() {
-        this.oninit = sinon.spy();
-      });
+      var C = Component.inherits();
+      C.prototype.oninit = sinon.spy();
       var c = new C();
       assert(c.oninit.called);
     });
@@ -223,18 +201,16 @@ describe('Component', function() {
 
   describe('.main', function() {
     it('should mark dirty component', function() {
-      var C = Component.inherits();
-      var c = new C();
+      var c = new Component({});
       c.markDirty();
       assert.equal(Component.main.dirtyComponents[0], c);
       assert.notEqual(Component.main.requestID, 0);
     });
 
     it('update components', function(done) {
-      var C = Component.inherits();
-      var c0 = new C();
-      var c1 = new C();
-      var c2 = new C();
+      var c0 = new Component({});
+      var c1 = new Component({});
+      var c2 = new Component({});
       var r0 = new Relation();
       var r1 = new Relation();
       r0.update = function() { c1.markDirty(); };
