@@ -248,3 +248,13 @@ describe('Component', function() {
     });
   });
 });
+
+describe('Relation', function() {
+  describe('.inherits', function() {
+    it('should return constructor', function() {
+      var R = Relation.inherits();
+      var r = new R();
+      assert(r instanceof Relation);
+    });
+  });
+});
