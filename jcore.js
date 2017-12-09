@@ -360,13 +360,10 @@
     this.draggable = new dom.Draggable(this.component.element());
   };
 
-  Draggable.inherits = function(initializer) {
+  Draggable.inherits = function() {
     var superCtor = this;
-    var ctor = function() {
-      if (typeof initializer === 'function') {
-        var props = (arguments.length !== 0 ? arguments[0] : {});
-        initializer.call(this, props);
-      }
+    var ctor = function(props) {
+      superCtor.call(this, props);
     };
     inherits(ctor, superCtor);
     return ctor;

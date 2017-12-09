@@ -278,7 +278,7 @@ describe('Draggable', function() {
   describe('.inherits', function() {
     it('should return constructor', function() {
       var D = Draggable.inherits();
-      var d = new D();
+      var d = new D({ component : new Component({}) });
       assert(d instanceof Draggable);
     });
   });
