@@ -358,9 +358,9 @@
     return ctor;
   };
 
-  var Draggable = function(props) {
-    this.component = props.component;
-    this.draggable = new dom.Draggable(this.component.element());
+  var Draggable = function(component) {
+    this.component = component;
+    this.draggable = new dom.Draggable(component.element());
   };
 
   Draggable.prototype.enable = function() {
@@ -383,8 +383,8 @@
 
   Draggable.inherits = function() {
     var superCtor = this;
-    var ctor = function(props) {
-      superCtor.call(this, props);
+    var ctor = function(component) {
+      superCtor.call(this, component);
     };
     inherits(ctor, superCtor);
     return ctor;

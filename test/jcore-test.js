@@ -246,15 +246,13 @@ describe('Draggable', function() {
   describe('#draggable', function() {
     it('should have element', function() {
       var e = document.createElement('div');
-      var c = new Component({ element: e });
-      var d = new Draggable({ component: c });
+      var d = new Draggable(new Component({ element: e }));
       assert.equal(d.draggable.element, e);
     });
 
     it('should handle drag event', function() {
       var e = document.createElement('div');
-      var c = new Component({ element: e });
-      var d = new Draggable({ component: c });
+      var d = new Draggable(new Component({ element: e }));
       d.draggable.enable({ onstart: sinon.spy(), onmove: sinon.spy(), onend: sinon.spy() });
       var supportsTouch = ('createTouch' in document);
 
@@ -277,7 +275,7 @@ describe('Draggable', function() {
 
   describe('#enable', function() {
     it('should enable event listeners of draggable', function() {
-      var d = new Draggable({ component : new Component({}) });
+      var d = new Draggable(new Component({}));
       d.draggable.enable = sinon.spy(d.draggable.enable);
       d.onstart = sinon.spy();
       d.onmove = sinon.spy();
@@ -295,7 +293,7 @@ describe('Draggable', function() {
 
   describe('#disable', function() {
     it('should disable event listeners of draggable', function() {
-      var d = new Draggable({ component : new Component({}) });
+      var d = new Draggable(new Component({}));
       d.draggable.disable = sinon.spy(d.draggable.disable);
       d.disable();
       assert(d.draggable.disable.called);
@@ -308,7 +306,7 @@ describe('Draggable', function() {
   describe('.inherits', function() {
     it('should return constructor', function() {
       var D = Draggable.inherits();
-      var d = new D({ component : new Component({}) });
+      var d = new D(new Component({}));
       assert(d instanceof Draggable);
     });
   });
