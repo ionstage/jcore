@@ -24,6 +24,147 @@
     });
   };
 
+  var dom = {};
+
+  dom.rect = function(el) {
+    return el.getBoundingClientRect();
+  };
+
+  dom.offsetLeft = function(el) {
+    return dom.rect(el).left - el.scrollLeft - dom.rect(document.body).left;
+  };
+
+  dom.offsetTop = function(el) {
+    return dom.rect(el).top - el.scrollTop - dom.rect(document.body).top;
+  };
+
+  dom.on = function(el, type, listener, useCapture) {
+    el.addEventListener(type, listener, !!useCapture);
+  };
+
+  dom.off = function(el, type, listener, useCapture) {
+    el.removeEventListener(type, listener, !!useCapture);
+  };
+
+  dom.supportsTouch = function() {
+    return ('createTouch' in document);
+  };
+
+  dom.changedTouch = function(event) {
+    return (dom.supportsTouch() && 'changedTouches' in event ? event.changedTouches[0] : null);
+  };
+
+  dom.eventType = function(name) {
+    switch (name) {
+      case 'start':
+        return (dom.supportsTouch() ? 'touchstart' : 'mousedown');
+      case 'move':
+        return (dom.supportsTouch() ? 'touchmove' : 'mousemove');
+      case 'end':
+        return (dom.supportsTouch() ? 'touchend' : 'mouseup');
+      default:
+        throw new Error('Invalid event type');
+    }
+  };
+
+  dom.pageX = function(event) {
+    return (dom.changedTouch(event) || event).pageX;
+  };
+
+  dom.pageY = function(event) {
+    return (dom.changedTouch(event) || event).pageY;
+  };
+
+  dom.clientX = function(event) {
+    return (dom.changedTouch(event) || event).clientX;
+  };
+
+  dom.clientY = function(event) {
+    return (dom.changedTouch(event) || event).clientY;
+  };
+
+  dom.identifier = function(event) {
+    var touch = dom.changedTouch(event);
+    return (touch ? touch.identifier : null);
+  };
+
+  dom.Draggable = (function() {
+    var Draggable = function(element) {
+      this.element = element;
+      this.start = this.start.bind(this);
+      this.move = this.move.bind(this);
+      this.end = this.end.bind(this);
+      this.onstart = null;
+      this.onmove = null;
+      this.onend = null;
+      this.lock = false;
+      this.identifier = null;
+      this.startPageX = 0;
+      this.startPageY = 0;
+      this.context = {};
+    };
+
+    Draggable.prototype.enable = function(listeners) {
+      this.onstart = listeners.onstart;
+      this.onmove = listeners.onmove;
+      this.onend = listeners.onend;
+      dom.on(this.element, dom.eventType('start'), this.start);
+    };
+
+    Draggable.prototype.disable = function() {
+      dom.off(this.element, dom.eventType('start'), this.start);
+      dom.off(document, dom.eventType('move'), this.move);
+      dom.off(document, dom.eventType('end'), this.end);
+      this.lock = false;
+      this.context = {};
+    };
+
+    Draggable.prototype.start = function(event) {
+      if (this.lock) {
+        return;
+      }
+
+      this.lock = true;
+      this.identifier = dom.identifier(event);
+      this.startPageX = dom.pageX(event);
+      this.startPageY = dom.pageY(event);
+
+      var x = dom.clientX(event) - dom.offsetLeft(this.element);
+      var y = dom.clientY(event) - dom.offsetTop(this.element);
+      this.onstart.call(null, x, y, event, this.context);
+
+      dom.on(document, dom.eventType('move'), this.move);
+      dom.on(document, dom.eventType('end'), this.end);
+    };
+
+    Draggable.prototype.move = function(event) {
+      if (this.identifier && this.identifier !== dom.identifier(event)) {
+        return;
+      }
+
+      var dx = dom.pageX(event) - this.startPageX;
+      var dy = dom.pageY(event) - this.startPageY;
+      this.onmove.call(null, dx, dy, event, this.context);
+    };
+
+    Draggable.prototype.end = function(event) {
+      if (this.identifier && this.identifier !== dom.identifier(event)) {
+        return;
+      }
+
+      dom.off(document, dom.eventType('move'), this.move);
+      dom.off(document, dom.eventType('end'), this.end);
+
+      var dx = dom.pageX(event) - this.startPageX;
+      var dy = dom.pageY(event) - this.startPageY;
+      this.onend.call(null, dx, dy, event, this.context);
+
+      this.lock = false;
+    };
+
+    return Draggable;
+  })();
+
   var Component = function(props) {
     this.element = this.prop(props.element || this.render());
     this.parentElement = this.prop(this.element().parentNode);
@@ -214,7 +355,10 @@
     return ctor;
   };
 
-  var Draggable = function() {};
+  var Draggable = function(props) {
+    this.component = props.component;
+    this.draggable = new dom.Draggable(this.component.element());
+  };
 
   Draggable.inherits = function(initializer) {
     var superCtor = this;

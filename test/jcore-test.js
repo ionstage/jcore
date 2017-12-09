@@ -243,6 +243,38 @@ describe('Relation', function() {
 });
 
 describe('Draggable', function() {
+  describe('#draggable', function() {
+    it('should have element', function() {
+      var e = document.createElement('div');
+      var c = new Component({ element: e });
+      var d = new Draggable({ component: c });
+      assert.equal(d.draggable.element, e);
+    });
+
+    it('should handle drag event', function() {
+      var e = document.createElement('div');
+      var c = new Component({ element: e });
+      var d = new Draggable({ component: c });
+      d.draggable.enable({ onstart: sinon.spy(), onmove: sinon.spy(), onend: sinon.spy() });
+      var supportsTouch = ('createTouch' in document);
+
+      var ev = document.createEvent('Event');
+      ev.initEvent((supportsTouch ? 'touchstart' : 'mousedown'), true, true);
+      e.dispatchEvent(ev);
+      assert(d.draggable.onstart.called);
+
+      ev = document.createEvent('Event');
+      ev.initEvent((supportsTouch ? 'touchmove' : 'mousemove'), true, true);
+      document.dispatchEvent(ev);
+      assert(d.draggable.onmove.called);
+
+      ev = document.createEvent('Event');
+      ev.initEvent((supportsTouch ? 'touchend' : 'mouseup'), true, true);
+      document.dispatchEvent(ev);
+      assert(d.draggable.onend.called);
+    });
+  });
+
   describe('.inherits', function() {
     it('should return constructor', function() {
       var D = Draggable.inherits();
