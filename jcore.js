@@ -115,6 +115,9 @@
       dom.off(this.element, dom.eventType('start'), this.start);
       dom.off(document, dom.eventType('move'), this.move);
       dom.off(document, dom.eventType('end'), this.end);
+      this.onstart = null;
+      this.onmove = null;
+      this.onend = null;
       this.lock = false;
       this.context = {};
     };
@@ -366,6 +369,10 @@
       onmove: this.onmove.bind(this, this.component),
       onend: this.onend.bind(this, this.component),
     });
+  };
+
+  Draggable.prototype.disable = function() {
+    this.draggable.disable();
   };
 
   Draggable.prototype.onstart = function(component, x, y, event, context) {};

@@ -293,6 +293,18 @@ describe('Draggable', function() {
     });
   });
 
+  describe('#disable', function() {
+    it('should disable event listeners of draggable', function() {
+      var d = new Draggable({ component : new Component({}) });
+      d.draggable.disable = sinon.spy(d.draggable.disable);
+      d.disable();
+      assert(d.draggable.disable.called);
+      assert(!d.onstart.called);
+      assert(!d.onmove.called);
+      assert(!d.onend.called);
+    });
+  });
+
   describe('.inherits', function() {
     it('should return constructor', function() {
       var D = Draggable.inherits();
