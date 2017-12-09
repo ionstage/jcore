@@ -360,6 +360,20 @@
     this.draggable = new dom.Draggable(this.component.element());
   };
 
+  Draggable.prototype.enable = function() {
+    this.draggable.enable({
+      onstart: this.onstart.bind(this, this.component),
+      onmove: this.onmove.bind(this, this.component),
+      onend: this.onend.bind(this, this.component),
+    });
+  };
+
+  Draggable.prototype.onstart = function(component, x, y, event, context) {};
+
+  Draggable.prototype.onmove = function(component, dx, dy, event, context) {};
+
+  Draggable.prototype.onend = function(component, dx, dy, event, context) {};
+
   Draggable.inherits = function() {
     var superCtor = this;
     var ctor = function(props) {
