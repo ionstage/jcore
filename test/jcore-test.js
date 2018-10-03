@@ -1,12 +1,14 @@
 var assert = require('assert');
 var jsdom = require('jsdom');
 var sinon = require('sinon');
+
+global.window = (new jsdom.JSDOM()).window;
+global.document = global.window.document;
+
 var jCore = require('../jcore.js');
 var Component = jCore.Component;
 var Relation = jCore.Relation;
 var Draggable = jCore.Draggable;
-
-global.document = (new jsdom.JSDOM()).window.document;
 
 describe('Component', function() {
   beforeEach(function() {

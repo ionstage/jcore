@@ -7,8 +7,8 @@
 (function(global) {
   'use strict';
 
-  if (!global.requestAnimationFrame) {
-    global.requestAnimationFrame = function(callback) {
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = function(callback) {
       return setTimeout(callback, 1000 / 60);
     };
   }
@@ -295,7 +295,7 @@
       if (this.requestID) {
         return;
       }
-      this.requestID = global.requestAnimationFrame(this.onanimate.bind(this));
+      this.requestID = window.requestAnimationFrame(this.onanimate.bind(this));
     };
 
     Main.prototype.update = function(index) {
