@@ -4,7 +4,7 @@
  * Released under the MIT License.
  */
 
-(function(global) {
+(function() {
   'use strict';
 
   if (!window.requestAnimationFrame) {
@@ -399,6 +399,6 @@
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = jCore;
   } else {
-    global.jCore = jCore;
+    window.jCore = jCore;
   }
-})(this);
+})();
