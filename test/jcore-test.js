@@ -48,7 +48,7 @@ describe('Component', function() {
       var c = new Component({});
       var r = new Relation();
       c.addRelation(r);
-      assert.equal(c.relations[0], r);
+      assert.equal(c._relations[0], r);
     });
   });
 
@@ -58,7 +58,7 @@ describe('Component', function() {
       var r = new Relation();
       c.addRelation(r);
       c.removeRelation(r);
-      assert.equal(c.relations.length, 0);
+      assert.equal(c._relations.length, 0);
     });
   });
 
@@ -67,7 +67,7 @@ describe('Component', function() {
       var c = new Component({});
       var l = function() {};
       c.on('test', l);
-      assert.equal(c.listeners.test[0], l);
+      assert.equal(c._listeners.test[0], l);
     });
   });
 
@@ -88,8 +88,8 @@ describe('Component', function() {
       c.on('test', function() {});
       c.on('test2', function() {});
       c.removeAllListeners('test');
-      assert(!c.listeners.test);
-      assert.equal(c.listeners.test2.length, 1);
+      assert(!c._listeners.test);
+      assert.equal(c._listeners.test2.length, 1);
     });
 
     it('should remove all listeners', function() {
@@ -98,8 +98,8 @@ describe('Component', function() {
       c.on('test', function() {});
       c.on('test2', function() {});
       c.removeAllListeners();
-      assert(!c.listeners.test);
-      assert(!c.listeners.test2);
+      assert(!c._listeners.test);
+      assert(!c._listeners.test2);
     });
   });
 
@@ -150,7 +150,7 @@ describe('Component', function() {
     it('should not call callback function without changing', function() {
       var c = new Component({});
       c.a = c.prop(0);
-      c.cache.a = 0;
+      c._cache.a = 0;
       var callback = sinon.spy();
       c.redrawBy('a', callback);
       assert(callback.notCalled);
@@ -160,11 +160,11 @@ describe('Component', function() {
       var c = new Component({});
       c.a = c.prop(0);
       c.a(1);
-      assert.notEqual(c.cache.a, 1);
+      assert.notEqual(c._cache.a, 1);
       c.redrawBy('a', function() {
-        assert.equal(c.cache.a, 1);
+        assert.equal(c._cache.a, 1);
       });
-      assert.equal(c.cache.a, 1);
+      assert.equal(c._cache.a, 1);
     });
   });
 
@@ -218,8 +218,8 @@ describe('Component', function() {
       var r1 = new Relation();
       r0.update = function() { c1.markDirty(); };
       r1.update = function() { c2.markDirty(); };
-      c0.relations = [r0];
-      c1.relations = [r1];
+      c0._relations = [r0];
+      c1._relations = [r1];
       c2.redraw = sinon.spy(done);
       c0.markDirty();
     });
@@ -249,44 +249,44 @@ describe('Draggable', function() {
     it('should have element', function() {
       var e = document.createElement('div');
       var d = new Draggable(new Component({ element: e }));
-      assert.equal(d.draggable.element, e);
+      assert.equal(d._draggable.element, e);
     });
 
     it('should handle drag event', function() {
       var e = document.createElement('div');
       var d = new Draggable(new Component({ element: e }));
-      d.draggable.enable({ onstart: sinon.spy(), onmove: sinon.spy(), onend: sinon.spy() });
+      d._draggable.enable({ onstart: sinon.spy(), onmove: sinon.spy(), onend: sinon.spy() });
       var supportsTouch = ('createTouch' in document);
 
       var ev = document.createEvent('Event');
       ev.initEvent((supportsTouch ? 'touchstart' : 'mousedown'), true, true);
       e.dispatchEvent(ev);
-      assert(d.draggable.onstart.called);
+      assert(d._draggable.onstart.called);
 
       ev = document.createEvent('Event');
       ev.initEvent((supportsTouch ? 'touchmove' : 'mousemove'), true, true);
       document.dispatchEvent(ev);
-      assert(d.draggable.onmove.called);
+      assert(d._draggable.onmove.called);
 
       ev = document.createEvent('Event');
       ev.initEvent((supportsTouch ? 'touchend' : 'mouseup'), true, true);
       document.dispatchEvent(ev);
-      assert(d.draggable.onend.called);
+      assert(d._draggable.onend.called);
     });
   });
 
   describe('#enable', function() {
     it('should enable event listeners of draggable', function() {
       var d = new Draggable(new Component({}));
-      d.draggable.enable = sinon.spy(d.draggable.enable);
+      d._draggable.enable = sinon.spy(d._draggable.enable);
       d.onstart = sinon.spy();
       d.onmove = sinon.spy();
       d.onend = sinon.spy();
       d.enable();
-      d.draggable.onstart();
-      d.draggable.onmove();
-      d.draggable.onend();
-      assert(d.draggable.enable.called);
+      d._draggable.onstart();
+      d._draggable.onmove();
+      d._draggable.onend();
+      assert(d._draggable.enable.called);
       assert(d.onstart.called);
       assert(d.onmove.called);
       assert(d.onend.called);
@@ -296,9 +296,9 @@ describe('Draggable', function() {
   describe('#disable', function() {
     it('should disable event listeners of draggable', function() {
       var d = new Draggable(new Component({}));
-      d.draggable.disable = sinon.spy(d.draggable.disable);
+      d._draggable.disable = sinon.spy(d._draggable.disable);
       d.disable();
-      assert(d.draggable.disable.called);
+      assert(d._draggable.disable.called);
       assert(!d.onstart.called);
       assert(!d.onmove.called);
       assert(!d.onend.called);
