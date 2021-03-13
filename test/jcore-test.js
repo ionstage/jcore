@@ -16,6 +16,14 @@ describe('Component', function() {
     Component.main.requestID = 0;
   });
 
+  describe('#el', function() {
+    it('should get element', function() {
+      var e = document.createElement('div');
+      var c = new Component({ el: e });
+      assert.equal(c.el, e);
+    });
+  });
+
   describe('#element', function() {
     it('should return element', function() {
       var e = document.createElement('div');

@@ -201,15 +201,30 @@
   })();
 
   var Component = function(props) {
-    this.element = this.prop((props && props.element) || this.render());
-    this.parentElement = this.prop(this.element().parentNode);
+    this.el = (props && (props.el || props.element)) || this.render();
+    this.parentElement = this.prop(this.el.parentNode);
     this._relations = [];
     this._cache = {};
     this._listeners = {};
   };
 
+  Component.prototype.element = function(el) {
+    if (typeof el === 'undefined') {
+      return this.el;
+    }
+    if (el === this.el) {
+      return;
+    }
+    if (el === null) {
+      throw new Error('element must not be null');
+    }
+    this.el = el;
+    this.parentElement(this.el.parentNode);
+    this.markDirty();
+  };
+
   Component.prototype.findElement = function(selectors) {
-    return this.element().querySelector(selectors);
+    return this.el.querySelector(selectors);
   };
 
   Component.prototype.prop = function(initialValue) {
@@ -267,15 +282,15 @@
   };
 
   Component.prototype.redraw = function() {
-    var element = this.element();
+    var el = this.el;
     var parentElement = this.parentElement();
     this.onredraw();
-    if (parentElement && parentElement !== element.parentNode) {
+    if (parentElement && parentElement !== el.parentNode) {
       this.onappend();
-      parentElement.appendChild(element);
-    } else if (!parentElement && element.parentNode) {
+      parentElement.appendChild(el);
+    } else if (!parentElement && el.parentNode) {
       this.onremove();
-      element.parentNode.removeChild(element);
+      el.parentNode.removeChild(el);
     }
   };
 
@@ -392,7 +407,7 @@
 
   var Draggable = function(component) {
     this._component = component;
-    this._draggable = new dom.Draggable(component.element());
+    this._draggable = new dom.Draggable(component.el);
   };
 
   Draggable.prototype.enable = function() {
