@@ -4,7 +4,7 @@ JavaScript library for building UI components
 
 ## Features
 
-- Small, simple, and just JavaScript
+- Small, simple, and no need of special tags or attributes
 - Standalone, no dependencies
 - Cross-browser: works on IE9+, Firefox, Safari, Chrome, Opera
 
@@ -12,15 +12,15 @@ JavaScript library for building UI components
 
 #### Toggle switches
 
-[Demo](https://jsfiddle.net/0y61L9jp/)
+[Demo](https://jsfiddle.net/ba5dqyc6/)
 
 ![Screen Shot](assets/toggle_switches.png)
 
-#### Nested draggable box
+#### Nested draggable boxes
 
-[Demo](https://jsfiddle.net/x4qfs912/)
+[Demo](https://jsfiddle.net/4uhopvqb/)
 
-![Screen Shot](assets/nested_draggable_box.png)
+![Screen Shot](assets/nested_draggable_boxes.png)
 
 ## License
 
