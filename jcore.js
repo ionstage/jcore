@@ -223,10 +223,6 @@
     this.markDirty();
   };
 
-  Component.prototype.findElement = function(selectors) {
-    return this.el.querySelector(selectors);
-  };
-
   Component.prototype.prop = function(initialValue) {
     var cache = initialValue;
     return function(value) {

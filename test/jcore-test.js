@@ -42,15 +42,6 @@ describe('Component', function() {
     });
   });
 
-  describe('#findElement', function() {
-    it('should return child element', function() {
-      var e = document.createElement('div');
-      var c = new Component({ el: e });
-      e.innerHTML = '<div class="test"></div>';
-      assert.strictEqual(c.findElement('.test'), e.children[0]);
-    });
-  });
-
   describe('#addRelation', function() {
     it('should append relation', function() {
       var c = new Component({});
