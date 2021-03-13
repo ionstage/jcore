@@ -201,7 +201,7 @@
   })();
 
   var Component = function(props) {
-    this.element = this.prop(props.element || this.render());
+    this.element = this.prop((props && props.element) || this.render());
     this.parentElement = this.prop(this.element().parentNode);
     this._relations = [];
     this._cache = {};
