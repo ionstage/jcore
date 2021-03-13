@@ -27,7 +27,7 @@ describe('Component', function() {
   describe('#element', function() {
     it('should return element', function() {
       var e = document.createElement('div');
-      var c = new Component({ element: e });
+      var c = new Component({ el: e });
       assert.strictEqual(c.element(), e);
     });
   });
@@ -37,7 +37,7 @@ describe('Component', function() {
       var e = document.createElement('div');
       var p = document.createElement('div');
       p.appendChild(e);
-      var c = new Component({ element: e });
+      var c = new Component({ el: e });
       assert.strictEqual(c.parentElement(), p);
     });
   });
@@ -45,7 +45,7 @@ describe('Component', function() {
   describe('#findElement', function() {
     it('should return child element', function() {
       var e = document.createElement('div');
-      var c = new Component({ element: e });
+      var c = new Component({ el: e });
       e.innerHTML = '<div class="test"></div>';
       assert.strictEqual(c.findElement('.test'), e.children[0]);
     });
@@ -126,18 +126,18 @@ describe('Component', function() {
       c.parentElement(p);
       c.redraw();
       assert(c.onappend.called);
-      assert.strictEqual(c.element().parentNode, p);
+      assert.strictEqual(c.el.parentNode, p);
     });
 
     it('should remove element', function() {
       var c = new Component({});
       var p = document.createElement('div');
-      p.appendChild(c.element());
+      p.appendChild(c.el);
       c.onremove = sinon.spy();
       c.parentElement(null);
       c.redraw();
       assert(c.onremove.called);
-      assert(!c.element().parentNode);
+      assert(!c.el.parentNode);
     });
   });
 
@@ -256,13 +256,13 @@ describe('Draggable', function() {
   describe('#draggable', function() {
     it('should have element', function() {
       var e = document.createElement('div');
-      var d = new Draggable(new Component({ element: e }));
+      var d = new Draggable(new Component({ el: e }));
       assert.strictEqual(d._draggable.el, e);
     });
 
     it('should handle drag event', function() {
       var e = document.createElement('div');
-      var d = new Draggable(new Component({ element: e }));
+      var d = new Draggable(new Component({ el: e }));
       d._draggable.enable({ onstart: sinon.spy(), onmove: sinon.spy(), onend: sinon.spy() });
       var supportsTouch = ('createTouch' in document);
 
