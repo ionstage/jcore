@@ -18,33 +18,33 @@ describe('Component', function() {
 
   describe('#el', function() {
     it('should get element', function() {
-      var e = document.createElement('div');
-      var c = new Component({ el: e });
-      assert.strictEqual(c.el, e);
+      var el = document.createElement('div');
+      var c = new Component(el);
+      assert.strictEqual(c.el, el);
     });
   });
 
   describe('#element', function() {
     it('should return element', function() {
-      var e = document.createElement('div');
-      var c = new Component({ el: e });
-      assert.strictEqual(c.element(), e);
+      var el = document.createElement('div');
+      var c = new Component(el);
+      assert.strictEqual(c.element(), el);
     });
   });
 
   describe('#parentElement', function() {
     it('should return parent element', function() {
-      var e = document.createElement('div');
+      var el = document.createElement('div');
       var p = document.createElement('div');
-      p.appendChild(e);
-      var c = new Component({ el: e });
+      p.appendChild(el);
+      var c = new Component(el);
       assert.strictEqual(c.parentElement(), p);
     });
   });
 
   describe('#addRelation', function() {
     it('should append relation', function() {
-      var c = new Component({});
+      var c = new Component();
       var r = new Relation();
       c.addRelation(r);
       assert.strictEqual(c._relations[0], r);
@@ -53,7 +53,7 @@ describe('Component', function() {
 
   describe('#removeRelation', function() {
     it('should remove relation', function() {
-      var c = new Component({});
+      var c = new Component();
       var r = new Relation();
       c.addRelation(r);
       c.removeRelation(r);
@@ -63,7 +63,7 @@ describe('Component', function() {
 
   describe('#on', function() {
     it('should register listener', function() {
-      var c = new Component({});
+      var c = new Component();
       var l = function() {};
       c.on('test', l);
       assert.strictEqual(c._listeners.test[0], l);
@@ -72,7 +72,7 @@ describe('Component', function() {
 
   describe('#emit', function() {
     it('should call registered listener', function() {
-      var c = new Component({});
+      var c = new Component();
       var l = sinon.spy();
       c.on('test', l);
       c.emit('test', 0, 1);
@@ -82,7 +82,7 @@ describe('Component', function() {
 
   describe('#removeAllListeners', function() {
     it('should remove listeners of the specified type', function() {
-      var c = new Component({});
+      var c = new Component();
       c.on('test', function() {});
       c.on('test', function() {});
       c.on('test2', function() {});
@@ -92,7 +92,7 @@ describe('Component', function() {
     });
 
     it('should remove all listeners', function() {
-      var c = new Component({});
+      var c = new Component();
       c.on('test', function() {});
       c.on('test', function() {});
       c.on('test2', function() {});
@@ -104,14 +104,14 @@ describe('Component', function() {
 
   describe('#redraw', function() {
     it('should call onredraw()', function() {
-      var c = new Component({});
+      var c = new Component();
       c.onredraw = sinon.spy();
       c.redraw();
       assert(c.onredraw.called);
     });
 
     it('should append element', function() {
-      var c = new Component({});
+      var c = new Component();
       var p = document.createElement('div');
       c.onappend = sinon.spy();
       c.parentElement(p);
@@ -121,7 +121,7 @@ describe('Component', function() {
     });
 
     it('should remove element', function() {
-      var c = new Component({});
+      var c = new Component();
       var p = document.createElement('div');
       p.appendChild(c.el);
       c.onremove = sinon.spy();
@@ -134,7 +134,7 @@ describe('Component', function() {
 
   describe('#redrawBy', function() {
     it('should call callback function on context of its method', function() {
-      var c = new Component({});
+      var c = new Component();
       c.a = c.prop(0);
       c.b = c.prop(0);
       c.a(1);
@@ -147,7 +147,7 @@ describe('Component', function() {
     });
 
     it('should not call callback function without changing', function() {
-      var c = new Component({});
+      var c = new Component();
       c.a = c.prop(0);
       c._cache.a = 0;
       var callback = sinon.spy();
@@ -156,7 +156,7 @@ describe('Component', function() {
     });
 
     it('should update cache', function() {
-      var c = new Component({});
+      var c = new Component();
       c.a = c.prop(0);
       c.a(1);
       assert.notStrictEqual(c._cache.a, 1);
@@ -169,14 +169,14 @@ describe('Component', function() {
 
   describe('#markDirty', function() {
     it('should call redraw() of component', function(done) {
-      var c = new Component({});
+      var c = new Component();
       c.redraw = sinon.spy(done);
       c.markDirty();
     });
 
     it('should not add dirty component twice', function() {
-      var c0 = new Component({});
-      var c1 = new Component({});
+      var c0 = new Component();
+      var c1 = new Component();
       c0.markDirty();
       c1.markDirty();
       c1.markDirty();
@@ -187,7 +187,7 @@ describe('Component', function() {
   describe('#render', function() {
     it('should call without element property', function() {
       Component.prototype.render = sinon.spy(Component.prototype.render);
-      var c = new Component({});
+      var c = new Component();
       assert(c.render.called);
     });
   });
@@ -203,16 +203,16 @@ describe('Component', function() {
 
   describe('.main', function() {
     it('should mark dirty component', function() {
-      var c = new Component({});
+      var c = new Component();
       c.markDirty();
       assert.strictEqual(Component.main.dirtyComponents[0], c);
       assert.notStrictEqual(Component.main.requestID, 0);
     });
 
     it('update components', function(done) {
-      var c0 = new Component({});
-      var c1 = new Component({});
-      var c2 = new Component({});
+      var c0 = new Component();
+      var c1 = new Component();
+      var c2 = new Component();
       var r0 = new Relation();
       var r1 = new Relation();
       r0.update = function() { c1.markDirty(); };
@@ -246,20 +246,20 @@ describe('Relation', function() {
 describe('Draggable', function() {
   describe('#draggable', function() {
     it('should have element', function() {
-      var e = document.createElement('div');
-      var d = new Draggable(new Component({ el: e }));
-      assert.strictEqual(d._draggable.el, e);
+      var el = document.createElement('div');
+      var d = new Draggable(new Component(el));
+      assert.strictEqual(d._draggable.el, el);
     });
 
     it('should handle drag event', function() {
-      var e = document.createElement('div');
-      var d = new Draggable(new Component({ el: e }));
+      var el = document.createElement('div');
+      var d = new Draggable(new Component(el));
       d._draggable.enable({ onstart: sinon.spy(), onmove: sinon.spy(), onend: sinon.spy() });
       var supportsTouch = ('createTouch' in document);
 
       var ev = document.createEvent('Event');
       ev.initEvent((supportsTouch ? 'touchstart' : 'mousedown'), true, true);
-      e.dispatchEvent(ev);
+      el.dispatchEvent(ev);
       assert(d._draggable.onstart.called);
 
       ev = document.createEvent('Event');
@@ -276,7 +276,7 @@ describe('Draggable', function() {
 
   describe('#enable', function() {
     it('should enable event listeners of draggable', function() {
-      var d = new Draggable(new Component({}));
+      var d = new Draggable(new Component());
       d._draggable.enable = sinon.spy(d._draggable.enable);
       d.onstart = sinon.spy();
       d.onmove = sinon.spy();
@@ -294,7 +294,7 @@ describe('Draggable', function() {
 
   describe('#disable', function() {
     it('should disable event listeners of draggable', function() {
-      var d = new Draggable(new Component({}));
+      var d = new Draggable(new Component());
       d._draggable.disable = sinon.spy(d._draggable.disable);
       d.disable();
       assert(d._draggable.disable.called);
@@ -307,7 +307,7 @@ describe('Draggable', function() {
   describe('.inherits', function() {
     it('should return constructor', function() {
       var D = Draggable.inherits();
-      var d = new D(new Component({}));
+      var d = new D(new Component());
       assert(d instanceof Draggable);
     });
   });

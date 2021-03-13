@@ -200,8 +200,8 @@
     return Draggable;
   })();
 
-  var Component = function(props) {
-    this.el = (props && props.el) || this.render();
+  var Component = function(el) {
+    this.el = el || this.render();
     this.parentElement = this.prop(this.el.parentNode);
     this._relations = [];
     this._cache = {};
@@ -215,8 +215,8 @@
     if (el === this.el) {
       return;
     }
-    if (el === null) {
-      throw new Error('element must not be null');
+    if (!el) {
+      throw new Error('missing element');
     }
     this.el = el;
     this.parentElement(this.el.parentNode);
@@ -371,10 +371,9 @@
   Component.inherits = function(initializer) {
     var superCtor = this;
     var ctor = function() {
-      var props = (arguments.length !== 0 ? arguments[0] : {});
-      superCtor.call(this, props);
+      superCtor.apply(this, arguments);
       if (typeof initializer === 'function') {
-        initializer.call(this, props);
+        initializer.apply(this, arguments);
       }
       if (this.constructor === ctor) {
         this.oninit();
@@ -393,8 +392,7 @@
     var superCtor = this;
     var ctor = function() {
       if (typeof initializer === 'function') {
-        var props = (arguments.length !== 0 ? arguments[0] : {});
-        initializer.call(this, props);
+        initializer.apply(this, arguments);
       }
     };
     inherits(ctor, superCtor);
@@ -426,8 +424,8 @@
 
   Draggable.inherits = function() {
     var superCtor = this;
-    var ctor = function(component) {
-      superCtor.call(this, component);
+    var ctor = function() {
+      superCtor.apply(this, arguments);
     };
     inherits(ctor, superCtor);
     return ctor;
