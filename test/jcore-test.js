@@ -20,7 +20,7 @@ describe('Component', function() {
     it('should get element', function() {
       var e = document.createElement('div');
       var c = new Component({ el: e });
-      assert.equal(c.el, e);
+      assert.strictEqual(c.el, e);
     });
   });
 
@@ -28,7 +28,7 @@ describe('Component', function() {
     it('should return element', function() {
       var e = document.createElement('div');
       var c = new Component({ element: e });
-      assert.equal(c.element(), e);
+      assert.strictEqual(c.element(), e);
     });
   });
 
@@ -38,7 +38,7 @@ describe('Component', function() {
       var p = document.createElement('div');
       p.appendChild(e);
       var c = new Component({ element: e });
-      assert.equal(c.parentElement(), p);
+      assert.strictEqual(c.parentElement(), p);
     });
   });
 
@@ -47,7 +47,7 @@ describe('Component', function() {
       var e = document.createElement('div');
       var c = new Component({ element: e });
       e.innerHTML = '<div class="test"></div>';
-      assert.equal(c.findElement('.test'), e.children[0]);
+      assert.strictEqual(c.findElement('.test'), e.children[0]);
     });
   });
 
@@ -56,7 +56,7 @@ describe('Component', function() {
       var c = new Component({});
       var r = new Relation();
       c.addRelation(r);
-      assert.equal(c._relations[0], r);
+      assert.strictEqual(c._relations[0], r);
     });
   });
 
@@ -66,7 +66,7 @@ describe('Component', function() {
       var r = new Relation();
       c.addRelation(r);
       c.removeRelation(r);
-      assert.equal(c._relations.length, 0);
+      assert.strictEqual(c._relations.length, 0);
     });
   });
 
@@ -75,7 +75,7 @@ describe('Component', function() {
       var c = new Component({});
       var l = function() {};
       c.on('test', l);
-      assert.equal(c._listeners.test[0], l);
+      assert.strictEqual(c._listeners.test[0], l);
     });
   });
 
@@ -97,7 +97,7 @@ describe('Component', function() {
       c.on('test2', function() {});
       c.removeAllListeners('test');
       assert(!c._listeners.test);
-      assert.equal(c._listeners.test2.length, 1);
+      assert.strictEqual(c._listeners.test2.length, 1);
     });
 
     it('should remove all listeners', function() {
@@ -126,7 +126,7 @@ describe('Component', function() {
       c.parentElement(p);
       c.redraw();
       assert(c.onappend.called);
-      assert.equal(c.element().parentNode, p);
+      assert.strictEqual(c.element().parentNode, p);
     });
 
     it('should remove element', function() {
@@ -148,8 +148,8 @@ describe('Component', function() {
       c.b = c.prop(0);
       c.a(1);
       var callback = sinon.spy(function(a, b) {
-        assert.equal(a, this.a());
-        assert.equal(b, this.b());
+        assert.strictEqual(a, this.a());
+        assert.strictEqual(b, this.b());
       });
       c.redrawBy('a', 'b', callback);
       assert(callback.called);
@@ -168,11 +168,11 @@ describe('Component', function() {
       var c = new Component({});
       c.a = c.prop(0);
       c.a(1);
-      assert.notEqual(c._cache.a, 1);
+      assert.notStrictEqual(c._cache.a, 1);
       c.redrawBy('a', function() {
-        assert.equal(c._cache.a, 1);
+        assert.strictEqual(c._cache.a, 1);
       });
-      assert.equal(c._cache.a, 1);
+      assert.strictEqual(c._cache.a, 1);
     });
   });
 
@@ -189,7 +189,7 @@ describe('Component', function() {
       c0.markDirty();
       c1.markDirty();
       c1.markDirty();
-      assert.equal(Component.main.dirtyComponents.length, 2);
+      assert.strictEqual(Component.main.dirtyComponents.length, 2);
     });
   });
 
@@ -214,8 +214,8 @@ describe('Component', function() {
     it('should mark dirty component', function() {
       var c = new Component({});
       c.markDirty();
-      assert.equal(Component.main.dirtyComponents[0], c);
-      assert.notEqual(Component.main.requestID, 0);
+      assert.strictEqual(Component.main.dirtyComponents[0], c);
+      assert.notStrictEqual(Component.main.requestID, 0);
     });
 
     it('update components', function(done) {
@@ -257,7 +257,7 @@ describe('Draggable', function() {
     it('should have element', function() {
       var e = document.createElement('div');
       var d = new Draggable(new Component({ element: e }));
-      assert.equal(d._draggable.el, e);
+      assert.strictEqual(d._draggable.el, e);
     });
 
     it('should handle drag event', function() {
