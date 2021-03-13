@@ -257,7 +257,7 @@ describe('Draggable', function() {
     it('should have element', function() {
       var e = document.createElement('div');
       var d = new Draggable(new Component({ element: e }));
-      assert.equal(d._draggable.element, e);
+      assert.equal(d._draggable.el, e);
     });
 
     it('should handle drag event', function() {
