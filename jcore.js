@@ -220,6 +220,7 @@
     }
     this.el = el;
     this.parentElement(this.el.parentNode);
+    this._cache = {};
     this.markDirty();
   };
 
