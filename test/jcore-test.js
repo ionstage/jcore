@@ -70,6 +70,16 @@ describe('Component', function() {
     });
   });
 
+  describe('#off', function() {
+    it('should unregister listener', function() {
+      var c = new Component();
+      var l = function() {};
+      c.on('test', l);
+      c.off('test', l);
+      assert.strictEqual(c._listeners.test.length, 0);
+    });
+  });
+
   describe('#emit', function() {
     it('should call registered listener', function() {
       var c = new Component();

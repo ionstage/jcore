@@ -258,6 +258,16 @@
     this._listeners[type].push(listener);
   };
 
+  Component.prototype.off = function(type, listener) {
+    if (!this._listeners[type]) {
+      return;
+    }
+    var index = this._listeners[type].lastIndexOf(listener);
+    if (index !== -1) {
+      this._listeners[type].splice(index, 1);
+    }
+  };
+
   Component.prototype.emit = function() {
     var args = Array.prototype.slice.call(arguments);
     var type = args.shift();
