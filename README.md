@@ -4,11 +4,11 @@ JavaScript library for building UI components
 
 ## Features
 
-- Supports existing HTML without any special annotations
+- Support existing HTML without any special annotations
 - Small, simple, and no transpiler
 - Standalone, no dependencies
 
-## Example
+## Examples
 
 #### Toggle switches
 
@@ -32,12 +32,12 @@ Works on IE9+, Firefox, Safari, Chrome, Opera
 
 ## API
 
-### Updating a DOM element
+### DOM updates
 
 #### Component([element])
 
 Get started with components by creating a custom component class.
-You can set the existing DOM element as the element of the component.
+You can pass the existing DOM element as an argument to a constructor of the component.
 
 ```js
 class MyComponent extends jCore.Component {
@@ -54,12 +54,11 @@ console.log(el === c.el);  // output: true
 
 #### Component#el
 
-A reference to the element of the component.
+A reference to an element of the component.
 
 #### Component#render()
 
-If none are set to a constructor of the component,
-this method is called to create a element of the component.
+This method is called to create an element of the component if no element is passed to a constructor of the component.
 
 ```js
 class MyComponent extends jCore.Component {
@@ -69,14 +68,14 @@ class MyComponent extends jCore.Component {
 
   render() {
     const el = document.createElement('div');
-    el.textContent = 'test';
+    el.textContent = 'My component';
     return el;
   }
 }
 
 const c = new MyComponent();
 
-console.log(c.el.textContent);  // output: "test"
+console.log(c.el.textContent);  // output: "My component"
 ```
 
 #### Component#prop(value)
@@ -89,7 +88,7 @@ class Rect extends jCore.Component {
   constructor(el, x, y, width, height) {
     super(el);
 
-    // create each property as a getter-setter with initial value
+    // create each property as a getter-setter with their initial values
     this.x = this.prop(x);
     this.y = this.prop(y);
     this.width = this.prop(width);
@@ -111,8 +110,7 @@ const b = rect.x(); // b == 50
 
 #### Component#onredraw()
 
-When you set a new value to a setter which is created by [*prop()*](#componentpropvalue),
-this method is called at the next redraw cycle of the browser (achieved by window.requestAnimationFrame) to update DOM element.
+This method is called at the next redraw cycle of the browser (achieved by window.requestAnimationFrame) to update a DOM element when you set a new value to a setter which is created by [*prop()*](#componentpropvalue).
 
 ```js
 class Rect extends jCore.Component {
@@ -148,7 +146,7 @@ for (let i = 0; i < 10000; i++) {
 
 #### Component#redrawBy(...propertyNames, callback)
 
-This is a helper method for updating DOM element in [*onredraw()*](#componentonredraw).
+This method is a helper function for updating a DOM element in [*onredraw()*](#componentonredraw).
 The given callback will be called when the property which is specified by its name is updated.
 Passed arguments of the callback are the latest values of each property.
 
@@ -186,7 +184,7 @@ class Rect extends jCore.Component {
 }
 ```
 
-You will be able to change an implementation for updating DOM element without changing component's property names.
+You will be able to change an implementation of updating a DOM element without changing component's property names.
 
 ```js
 class Rect extends jCore.Component {
@@ -213,8 +211,7 @@ class Rect extends jCore.Component {
 
 #### Component#markDirty()
 
-If there are some updates without setting a new value to a setter created from [*prop()*](#componentpropvalue),
-you can use this method to make a component ready for redrawing element.
+You can use this method to make a component ready for redrawing an element if there are some updates without setting a new value to a setter created from [*prop()*](#componentpropvalue).
 After this method is called, [*redraw()*](#componentredraw) will be called at the next redraw cycle.
 
 ```js
@@ -237,7 +234,7 @@ class MultiLineText extends jCore.Component {
 }
 ```
 
-You will use this method for initial redrawing.
+You will use this method for an initial update of the element.
 
 ```js
 class Rect extends jCore.Component {
@@ -248,7 +245,7 @@ class Rect extends jCore.Component {
     this.width = this.prop(width);
     this.height = this.prop(height);
 
-    // for initial redrawing
+    // for initial update (this.onredraw() will be called)
     this.markDirty();
   }
 
@@ -263,13 +260,11 @@ class Rect extends jCore.Component {
 
 const el = document.getElementById('rect');
 const rect = new Rect(el, 0, 0, 200, 100);
-
-// rect.onredraw() will be called
 ```
 
 #### Component#redraw()
 
-This method calls [*onredraw()*](#componentonredraw), and if a parent element of the component's element is changed by [*parentElement()*](#componentparentelementelementnull), applies DOM insertion or removal of the element to DOM tree.
+This method calls [*onredraw()*](#componentonredraw), and if a parent element of the component's element is changed by [*parentElement()*](#componentparentelementelementnull), then it applies DOM insertion or removal of the element to the DOM tree.
 You can use this method to update the element forcibly.
 It is not recommended to override this method in custom components.
 
@@ -295,7 +290,6 @@ class Rect extends jCore.Component {
 const el = document.getElementById('rect');
 const rect = new Rect(el, 0, 0, 200, 100);
 
-// force initial redrawing
 rect.redraw();
 const a = window.getComputedStyle(rect.el).width;  // a == '200px'
 
@@ -314,7 +308,7 @@ const c = window.getComputedStyle(rect.el).width;  // c == '100px'
 
 Get or set a parent element of the component's element.
 If you change a parent element, the component's element will be appended into the given parent element.
-You cat set a parent element as null and the component's element will be removed from DOM tree.
+You cat set a parent element as null and the component's element will be removed from the DOM tree.
 This DOM insertion and removal is the only implicit changes to a DOM element in jCore library.
 
 ```js
@@ -333,8 +327,8 @@ class MyComponent extends jCore.Component {
 const c = new MyComponent();
 const parent = document.getElementById('parent');
 c.parentElement(parent);
-
 c.redraw();
+
 console.log(c.el.parentNode === parent);  // output: true
 ```
 
@@ -342,17 +336,17 @@ console.log(c.el.parentNode === parent);  // output: true
 
 Get or set the component's element.
 If you set a new element, [*parentElement()*](#componentparentelementelementnull) is also called with the parent element of the element.
-It is a rare case for calling this method.
+It is unusual to call this method.
 
 #### Component#onappend()
 
-This method is called when a element is appended into a parent element by calling [*parentElement()*](#componentparentelementelementnull).
-You can override this method for registration of event listeners or loading resources and so on.
+This method is called when an element is appended into a parent element by calling [*parentElement()*](#componentparentelementelementnull).
+You can override this method for a registration of event listeners or loading resources and so on.
 
 #### Component#onremove()
 
-This method is called when a element is removed by calling [*parentElement()*](#componentparentelementelementnull).
-You can override this method for unregistration of event listeners or releasing resources and so on.
+This method is called when an element is removed by calling [*parentElement()*](#componentparentelementelementnull).
+You can override this method for an unregistration of event listeners or releasing resources and so on.
 
 ```js
 class ClickableComponent extends jCore.Component {
@@ -416,14 +410,14 @@ c.on('click', count => {
 
 #### Relation()
 
-Changes of some components state is associated with changes of other components state.
-jCore provides a unique approach for related changes on a group of components.
+Sometimes changing state of a component is associated with a state of another component.
+jCore takes a unique approach for related changes on a group of components.
 Every component can have a relation object that is used for updating other components when just before redrawing itself.
 
 #### Relation#update(component)
 
 This method is called just before the component which has a relation object is redrawing.
-You can override this method and implement for the changes of related components. 
+You can override this method and implement for the changes of related components.
 
 #### Component#addRelation(relation)
 
@@ -433,12 +427,12 @@ Add a relation object to a component.
 
 Remove a relation object from a component.
 
-### Make draggable component
+### Draggable components
 
 #### Draggable(component)
 
-jCore provides a build-in module for making draggable component.
-You make a custom draggable class and set a component to make it draggable.
+jCore provides a built-in module for making draggable component.
+You can make a custom draggable class and pass a component as an argument to make it draggable.
 
 #### Draggable#enable()
 
@@ -451,23 +445,23 @@ Deactivate the draggable module.
 
 #### Draggable#onstart(component, x, y, event, context)
 
-Handler method to get event for drag start.
+A handler method to get event for drag start.
 
-#### Draggable#onmove(component, x, y, event, context)
+#### Draggable#onmove(component, dx, dy, event, context)
 
-Handler method to get event for moving.
+A handler method to get event for moving.
 
-#### Draggable#onend(component, x, y, event, context)
+#### Draggable#onend(component, dx, dy, event, context)
 
-Handler method to get event for drag end.
+A handler method to get event for drag end.
 
 ## Code example (Relation & Draggable)
 
-- Create two components of rectangles
-- The first rectangle is draggable
-- The second rectangle moves related with the position of the first rectangle
+- Create two rectangle components
+- The rectangles are draggable
+- Each rectangle moves together with keeping a certain distance between the rectangles
 
-[Demo](https://jsfiddle.net/gxpdbey0/)
+[Demo](https://jsfiddle.net/gd8tqyw6/)
 
 ```js
 class Rect extends jCore.Component {
@@ -477,7 +471,9 @@ class Rect extends jCore.Component {
     this.y = this.prop(y);
     this.width = this.prop(width);
     this.height = this.prop(height);
+    this.draggable = new RectDraggable(this);
 
+    this.draggable.enable();
     this.markDirty();
   }
 
@@ -491,14 +487,16 @@ class Rect extends jCore.Component {
 }
 
 class RectRelation extends jCore.Relation {
-  constructor(targetRect) {
+  constructor(relatedRect, offsetX, offsetY) {
     super();
-    this.targetRect = targetRect;
+    this.relatedRect = relatedRect;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
   }
 
   update(rect) {
-    this.targetRect.x(rect.x() + 100);
-    this.targetRect.y(rect.y() + 100);
+    this.relatedRect.x(rect.x() + this.offsetX);
+    this.relatedRect.y(rect.y() + this.offsetY);
   }
 }
 
@@ -519,8 +517,8 @@ const elements = document.querySelectorAll('.rect');
 const first = new Rect(elements[0], 0, 0, 100, 50);
 const second = new Rect(elements[1], 0, 0, 100, 50);
 
-first.addRelation(new RectRelation(second));
-new RectDraggable(first).enable();
+first.addRelation(new RectRelation(second, 100, 100));
+second.addRelation(new RectRelation(first, -100, -100));
 ```
 
 ## License
