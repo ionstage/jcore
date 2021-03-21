@@ -84,7 +84,7 @@
     Draggable.getScrollOffset = function(el) {
       var x = 0;
       var y = 0;
-      var el = el.parentNode;
+      el = el.parentNode;
       while (el) {
         x += el.scrollLeft || 0;
         y += el.scrollTop || 0;
