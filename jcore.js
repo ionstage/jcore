@@ -44,6 +44,8 @@
       this.startPageY = 0;
       this.startScrollX = 0;
       this.startScrollY = 0;
+      this.startScrollWidth = 0;
+      this.startScrollHeight = 0;
       this.dScrollX = 0;
       this.dScrollY = 0;
       this.context = null;
@@ -84,13 +86,22 @@
     Draggable.getScrollOffset = function(el) {
       var x = 0;
       var y = 0;
+      var width = 0;
+      var height = 0;
       el = el.parentNode;
       while (el) {
         x += el.scrollLeft || 0;
         y += el.scrollTop || 0;
+        width += (el.scrollWidth - el.clientWidth) || 0;
+        height += (el.scrollHeight - el.clientHeight) || 0;
         el = el.parentNode;
       }
-      return { x: x, y: y };
+      return {
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+      };
     };
 
     Draggable.prototype.enable = function(listeners) {
@@ -123,6 +134,8 @@
       var scrollOffset = Draggable.getScrollOffset(event.target);
       this.startScrollX = scrollOffset.x;
       this.startScrollY = scrollOffset.y;
+      this.startScrollWidth = scrollOffset.width;
+      this.startScrollHeight = scrollOffset.height;
       this.dScrollX = 0;
       this.dScrollY = 0;
       this.onstart.call(null, x, y, event, this.context);
@@ -160,6 +173,8 @@
       var scrollOffset = Draggable.getScrollOffset(event.target);
       this.startScrollX = scrollOffset.x;
       this.startScrollY = scrollOffset.y;
+      this.startScrollWidth = scrollOffset.width;
+      this.startScrollHeight = scrollOffset.height;
       this.dScrollX = 0;
       this.dScrollY = 0;
       this.onstart.call(null, x, y, event, this.context);
@@ -193,8 +208,10 @@
 
     Draggable.prototype.onscroll = function() {
       var scrollOffset = Draggable.getScrollOffset(this.el);
-      this.dScrollX = scrollOffset.x - this.startScrollX;
-      this.dScrollY = scrollOffset.y - this.startScrollY;
+      var dScrollWidth = scrollOffset.width - this.startScrollWidth;
+      var dScrollHeight = scrollOffset.height - this.startScrollHeight;
+      this.dScrollX = scrollOffset.x - this.startScrollX - dScrollWidth;
+      this.dScrollY = scrollOffset.y - this.startScrollY - dScrollHeight;
     };
 
     return Draggable;
