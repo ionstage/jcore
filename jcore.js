@@ -104,6 +104,15 @@
       };
     };
 
+    Draggable.getTouch = function(touches, identifier) {
+      for (var i = 0, len = touches.length; i < len; i++) {
+        if (touches[i].identifier === identifier) {
+          return touches[i];
+        }
+      }
+      return null;
+    };
+
     Draggable.prototype.enable = function(listeners) {
       this.onstart = listeners.onstart;
       this.onmove = listeners.onmove;
@@ -160,7 +169,7 @@
     };
 
     Draggable.prototype.ontouchstart = function(event) {
-      if (event.touches.length > 1) {
+      if (this.identifier !== null) {
         return;
       }
       var touch = event.changedTouches[0];
@@ -184,8 +193,8 @@
     };
 
     Draggable.prototype.ontouchmove = function(event) {
-      var touch = event.changedTouches[0];
-      if (touch.identifier !== this.identifier) {
+      var touch = Draggable.getTouch(event.changedTouches, this.identifier);
+      if (touch === null) {
         return;
       }
       var dx = touch.pageX - this.startPageX + this.dScrollX;
@@ -194,13 +203,14 @@
     };
 
     Draggable.prototype.ontouchend = function(event) {
-      var touch = event.changedTouches[0];
-      if (touch.identifier !== this.identifier) {
+      var touch = Draggable.getTouch(event.changedTouches, this.identifier);
+      if (touch === null) {
         return;
       }
       document.removeEventListener('touchmove', this.ontouchmove);
       document.removeEventListener('touchend', this.ontouchend);
       document.removeEventListener('scroll', this.onscroll, true);
+      this.identifier = null;
       var dx = touch.pageX - this.startPageX + this.dScrollX;
       var dy = touch.pageY - this.startPageY + this.dScrollY;
       this.onend.call(null, dx, dy, event, this.context);
