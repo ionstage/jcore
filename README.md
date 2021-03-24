@@ -110,7 +110,7 @@ const b = rect.x(); // b == 50
 
 #### Component#onredraw()
 
-This method is called at the next redraw cycle of the browser (achieved by window.requestAnimationFrame) to update a DOM element when you set a new value to a setter which is created by [*prop()*](#componentpropvalue).
+This method is called at the next redraw cycle of the browser (achieved by window.requestAnimationFrame) to update a DOM element when you set a new value to a setter which is created from [*prop()*](#componentpropvalue).
 
 ```js
 class Rect extends jCore.Component {
@@ -264,7 +264,7 @@ const rect = new Rect(el, 0, 0, 200, 100);
 
 #### Component#redraw()
 
-This method calls [*onredraw()*](#componentonredraw), and if a parent element of the component's element is changed by [*parentElement()*](#componentparentelementelementnull), then it applies DOM insertion or removal of the element to the DOM tree.
+This method calls [*onredraw()*](#componentonredraw), and if a parent element of the component's element is changed by calling [*parentElement()*](#componentparentelementelementnull), then it applies DOM insertion or removal of the element to the DOM tree.
 You can use this method to update the element forcibly.
 It is not recommended to override this method in custom components.
 
@@ -309,7 +309,7 @@ const c = window.getComputedStyle(rect.el).width;  // c == '100px'
 Get or set a parent element of the component's element.
 If you change a parent element, the component's element will be appended into the given parent element.
 You cat set a parent element as null and the component's element will be removed from the DOM tree.
-This DOM insertion and removal is the only implicit changes to a DOM element in jCore library.
+This DOM insertion and removal is the only indirect changes to a DOM element in jCore library.
 
 ```js
 class MyComponent extends jCore.Component {
