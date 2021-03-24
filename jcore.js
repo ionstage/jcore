@@ -460,10 +460,13 @@
 
   Draggable.prototype.onend = function(component, dx, dy, event, context) {};
 
-  Draggable.inherits = function() {
+  Draggable.inherits = function(initializer) {
     var superCtor = this;
     var ctor = function() {
       superCtor.apply(this, arguments);
+      if (typeof initializer === 'function') {
+        initializer.apply(this, arguments);
+      }
     };
     inherits(ctor, superCtor);
     return ctor;
