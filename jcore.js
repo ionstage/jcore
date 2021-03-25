@@ -121,7 +121,6 @@
       this.onstart = listeners.onstart;
       this.onmove = listeners.onmove;
       this.onend = listeners.onend;
-      this.pointer.context = {};
       var type = (Draggable.supportsTouch() ? 'touchstart' : 'mousedown');
       this.el.addEventListener(type, this['on' + type], { passive: false });
     };
@@ -151,6 +150,7 @@
       this.pointer.startScrollHeight = scrollOffset.height;
       this.pointer.dScrollX = 0;
       this.pointer.dScrollY = 0;
+      this.pointer.context = {};
       this.onstart.call(null, x, y, event, this.pointer.context);
       document.addEventListener('mousemove', this.onmousemove);
       document.addEventListener('mouseup', this.onmouseup);
@@ -170,6 +170,7 @@
       var dx = event.pageX - this.pointer.startPageX + this.pointer.dScrollX;
       var dy = event.pageY - this.pointer.startPageY + this.pointer.dScrollY;
       this.onend.call(null, dx, dy, event, this.pointer.context);
+      this.pointer.context = null;
     };
 
     Draggable.prototype.ontouchstart = function(event) {
@@ -190,6 +191,7 @@
       this.pointer.startScrollHeight = scrollOffset.height;
       this.pointer.dScrollX = 0;
       this.pointer.dScrollY = 0;
+      this.pointer.context = {};
       this.onstart.call(null, x, y, event, this.pointer.context);
       document.addEventListener('touchmove', this.ontouchmove);
       document.addEventListener('touchend', this.ontouchend);
@@ -218,6 +220,7 @@
       var dx = touch.pageX - this.pointer.startPageX + this.pointer.dScrollX;
       var dy = touch.pageY - this.pointer.startPageY + this.pointer.dScrollY;
       this.onend.call(null, dx, dy, event, this.pointer.context);
+      this.pointer.context = null;
     };
 
     Draggable.prototype.onscroll = function() {
