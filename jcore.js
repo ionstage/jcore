@@ -110,15 +110,6 @@
       };
     };
 
-    Draggable.getTouch = function(touches, identifier) {
-      for (var i = 0, len = touches.length; i < len; i++) {
-        if (touches[i].identifier === identifier) {
-          return touches[i];
-        }
-      }
-      return null;
-    };
-
     Draggable.prototype.createPointer = function(identifier, event, onscroll) {
       var scroll = Draggable.getScrollOffset(event.target);
       return new Pointer(identifier, event.pageX, event.pageY, scroll, onscroll);
