@@ -115,14 +115,6 @@
       return new Pointer(identifier, event.pageX, event.pageY, scroll, onscroll);
     };
 
-    Draggable.prototype.hasPointer = function() {
-      return (Object.keys(this.pointers).length !== 0);
-    };
-
-    Draggable.prototype.findPointer = function(identifier) {
-      return this.pointers[identifier] || null;
-    };
-
     Draggable.prototype.addPointer = function(p) {
       document.addEventListener('scroll', p.onscroll, true);
       this.pointers[p.identifier] = p;
@@ -139,6 +131,14 @@
       Object.keys(this.pointers).forEach(function(identifier) {
         this.removePointer(this.pointers[identifier]);
       }, this);
+    };
+
+    Draggable.prototype.hasPointer = function() {
+      return (Object.keys(this.pointers).length !== 0);
+    };
+
+    Draggable.prototype.findPointer = function(identifier) {
+      return this.pointers[identifier] || null;
     };
 
     Draggable.prototype.enable = function(listeners) {
