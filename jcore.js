@@ -141,6 +141,26 @@
       return this.pointers[identifier] || null;
     };
 
+    Draggable.prototype.resolveUnhandledTouches = function(event) {
+      var identifiers = Object.keys(this.pointers);
+      if (identifiers.length === 0) {
+        return;
+      }
+      identifiers.forEach(function(identifier) {
+        for (var i = 0, len = event.touches.length; i < len; i++) {
+          if (event.touches[i].identifier === identifier) {
+            return;
+          }
+        }
+        // unhandled pointer
+        var p = this.pointers[identifier];
+        var dx = event.pageX - p.startPageX + p.dScrollX;
+        var dy = event.pageY - p.startPageY + p.dScrollY;
+        this.onend.call(null, dx, dy, event, p.context);
+        this.removePointer(p);
+      }, this);
+    };
+
     Draggable.prototype.enable = function(listeners) {
       this.onstart = listeners.onstart;
       this.onmove = listeners.onmove;
@@ -190,6 +210,7 @@
     };
 
     Draggable.prototype.ontouchstart = function(event) {
+      this.resolveUnhandledTouches(event);
       var hasPointer = this.hasPointer();
       var touches = event.changedTouches;
       for (var i = 0, len = touches.length; i < len; i++) {
