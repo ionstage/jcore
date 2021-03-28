@@ -117,14 +117,14 @@
 
     Draggable.prototype.addPointer = function(p) {
       document.addEventListener('scroll', p.onscroll, true);
-      this.pointers[p.identifier] = p;
+      this.pointers[String(p.identifier)] = p;
     };
 
     Draggable.prototype.removePointer = function(p) {
       document.removeEventListener('scroll', p.onscroll, true);
       p.context = null;
       p.onscroll = null;
-      delete this.pointers[p.identifier];
+      delete this.pointers[String(p.identifier)];
     };
 
     Draggable.prototype.removeAllPointers = function() {
@@ -138,7 +138,7 @@
     };
 
     Draggable.prototype.findPointer = function(identifier) {
-      return this.pointers[identifier] || null;
+      return this.pointers[String(identifier)] || null;
     };
 
     Draggable.prototype.resolveUnhandledTouches = function(event) {
@@ -147,13 +147,13 @@
         return;
       }
       identifiers.forEach(function(identifier) {
+        var p = this.pointers[identifier];
         for (var i = 0, len = event.touches.length; i < len; i++) {
-          if (event.touches[i].identifier === identifier) {
+          if (event.touches[i].identifier === p.identifier) {
             return;
           }
         }
-        // unhandled pointer
-        var p = this.pointers[identifier];
+        // pointer is unhandled
         var dx = event.pageX - p.startPageX + p.dScrollX;
         var dy = event.pageY - p.startPageY + p.dScrollY;
         this.onend.call(null, dx, dy, event, p.context);
