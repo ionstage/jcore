@@ -18,7 +18,7 @@ JavaScript library for building UI components
 
 #### Nested draggable boxes
 
-[Demo](https://jsfiddle.net/23wqf1ce/)
+[Demo](https://jsfiddle.net/cw6jak8m/)
 
 ![Screen Shot](assets/nested_draggable_boxes.png)
 
@@ -123,7 +123,7 @@ class Rect extends jCore.Component {
   }
 
   onredraw() {
-    // write code for updating element
+    // write code for updating the element
     this.el.style.left = this.x() + 'px';
     this.el.style.top = this.y() + 'px';
     this.el.style.width = this.width() + 'px';
@@ -203,8 +203,12 @@ class Rect extends jCore.Component {
       this.el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
     });
 
-    this.redrawBy('width', width => { this.el.style.width = width + 'px'; });
-    this.redrawBy('height', height => { this.el.style.height = height + 'px'; });
+    this.redrawBy('width', width => {
+      this.el.style.width = width + 'px';
+    });
+    this.redrawBy('height', height => {
+      this.el.style.height = height + 'px';
+    });
   }
 }
 ```
@@ -253,8 +257,12 @@ class Rect extends jCore.Component {
     this.redrawBy('x', 'y', (x, y) => {
       this.el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
     });
-    this.redrawBy('width', width => { this.el.style.width = width + 'px'; });
-    this.redrawBy('height', height => { this.el.style.height = height + 'px'; });
+    this.redrawBy('width', width => {
+      this.el.style.width = width + 'px';
+    });
+    this.redrawBy('height', height => {
+      this.el.style.height = height + 'px';
+    });
   }
 }
 
@@ -282,8 +290,12 @@ class Rect extends jCore.Component {
     this.redrawBy('x', 'y', (x, y) => {
       this.el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
     });
-    this.redrawBy('width', width => { this.el.style.width = width + 'px'; });
-    this.redrawBy('height', height => { this.el.style.height = height + 'px'; });
+    this.redrawBy('width', width => {
+      this.el.style.width = width + 'px';
+    });
+    this.redrawBy('height', height => {
+      this.el.style.height = height + 'px';
+    });
   }
 }
 
@@ -431,7 +443,7 @@ Remove a relation object from a component.
 
 #### Draggable(component)
 
-jCore provides a built-in module for making draggable component.
+jCore provides a built-in module for making a draggable component.
 You can make a custom draggable class and pass a component as an argument to make it draggable.
 
 #### Draggable#enable()
@@ -461,7 +473,7 @@ A handler method to get event for drag end.
 - The rectangles are draggable
 - Each rectangle moves together with keeping a certain distance between the rectangles
 
-[Demo](https://jsfiddle.net/gd8tqyw6/)
+[Demo](https://jsfiddle.net/owdv8qyj/)
 
 ```js
 class Rect extends jCore.Component {
@@ -481,8 +493,12 @@ class Rect extends jCore.Component {
     this.redrawBy('x', 'y', (x, y) => {
       this.el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
     });
-    this.redrawBy('width', width => { this.el.style.width = width + 'px'; });
-    this.redrawBy('height', height => { this.el.style.height = height + 'px'; });
+    this.redrawBy('width', width => {
+      this.el.style.width = width + 'px';
+    });
+    this.redrawBy('height', height => {
+      this.el.style.height = height + 'px';
+    });
   }
 }
 
