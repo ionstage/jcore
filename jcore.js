@@ -129,8 +129,8 @@
     };
 
     Draggable.prototype.removeAllPointers = function() {
-      Object.keys(this.pointers).forEach(function(identifier) {
-        this.removePointer(this.pointers[identifier]);
+      Object.keys(this.pointers).forEach(function(id) {
+        this.removePointer(this.pointers[id]);
       }, this);
     };
 
@@ -143,12 +143,12 @@
     };
 
     Draggable.prototype.resolveUnhandledTouches = function(event) {
-      var identifiers = Object.keys(this.pointers);
-      if (identifiers.length === 0) {
+      var ids = Object.keys(this.pointers);
+      if (ids.length === 0) {
         return;
       }
-      identifiers.forEach(function(identifier) {
-        var p = this.pointers[identifier];
+      ids.forEach(function(id) {
+        var p = this.pointers[id];
         for (var i = 0, len = event.touches.length; i < len; i++) {
           if (event.touches[i].identifier === p.identifier) {
             return;
