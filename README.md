@@ -46,7 +46,7 @@ class MyComponent extends jCore.Component {
   }
 }
 
-const el = document.getElementById('test');
+const el = document.getElementById('content');
 const c = new MyComponent(el);
 
 console.log(el === c.el);  // output: true
@@ -331,7 +331,7 @@ class MyComponent extends jCore.Component {
 
   render() {
     const el = document.createElement('div');
-    el.textContent = 'test';
+    el.textContent = 'My component';
     return el;
   }
 }
