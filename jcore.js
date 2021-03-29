@@ -110,8 +110,9 @@
       };
     };
 
-    Draggable.prototype.createPointer = function(identifier, event, onscroll) {
+    Draggable.prototype.createPointer = function(identifier, event) {
       var scroll = Draggable.getScrollOffset(event.target);
+      var onscroll = Draggable.debounce(this.onscroll.bind(this, identifier), 0);
       return new Pointer(identifier, event.pageX, event.pageY, scroll, onscroll);
     };
 
@@ -184,8 +185,7 @@
       var offset = Draggable.getOffset(event.target);
       var x = event.clientX - offset.x;
       var y = event.clientY - offset.y;
-      var onscroll = Draggable.debounce(this.onscroll.bind(this, IDENTIFIER_MOUSE), 0);
-      var p = this.createPointer(IDENTIFIER_MOUSE, event, onscroll);
+      var p = this.createPointer(IDENTIFIER_MOUSE, event);
       this.addPointer(p);
       this.onstart.call(null, x, y, event, p.context);
       document.addEventListener('mousemove', this.onmousemove);
@@ -218,8 +218,7 @@
         var offset = Draggable.getOffset(touch.target);
         var x = touch.clientX - offset.x;
         var y = touch.clientY - offset.y;
-        var onscroll = Draggable.debounce(this.onscroll.bind(this, touch.identifier), 0);
-        var p = this.createPointer(touch.identifier, touch, onscroll);
+        var p = this.createPointer(touch.identifier, touch);
         this.addPointer(p);
         this.onstart.call(null, x, y, event, p.context);
       }
