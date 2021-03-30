@@ -27,22 +27,6 @@
   var dom = {};
 
   dom.Draggable = (function() {
-    var IDENTIFIER_MOUSE = 0;
-
-    var Pointer = function(identifier, pageX, pageY, scroll, onscroll) {
-      this.identifier = identifier;
-      this.startPageX = pageX;
-      this.startPageY = pageY;
-      this.startScrollX = scroll.x;
-      this.startScrollY = scroll.y;
-      this.startScrollWidth = scroll.width;
-      this.startScrollHeight = scroll.height;
-      this.dScrollX = 0;
-      this.dScrollY = 0;
-      this.context = {};
-      this.onscroll = onscroll;
-    };
-
     var Draggable = function(el) {
       this.el = el;
       this.onstart = null;
@@ -55,6 +39,22 @@
       this.ontouchmove = this.ontouchmove.bind(this);
       this.ontouchend = this.ontouchend.bind(this);
       this.pointers = {};
+    };
+
+    Draggable.IDENTIFIER_MOUSE = 0;
+
+    Draggable.Pointer = function(identifier, pageX, pageY, scroll, onscroll) {
+      this.identifier = identifier;
+      this.startPageX = pageX;
+      this.startPageY = pageY;
+      this.startScrollX = scroll.x;
+      this.startScrollY = scroll.y;
+      this.startScrollWidth = scroll.width;
+      this.startScrollHeight = scroll.height;
+      this.dScrollX = 0;
+      this.dScrollY = 0;
+      this.context = {};
+      this.onscroll = onscroll;
     };
 
     Draggable.debounce = function(func, delay) {
@@ -113,7 +113,7 @@
     Draggable.prototype.createPointer = function(identifier, event) {
       var scroll = Draggable.getScrollOffset(event.target);
       var onscroll = Draggable.debounce(this.onscroll.bind(this, identifier), 0);
-      return new Pointer(identifier, event.pageX, event.pageY, scroll, onscroll);
+      return new Draggable.Pointer(identifier, event.pageX, event.pageY, scroll, onscroll);
     };
 
     Draggable.prototype.addPointer = function(p) {
@@ -185,7 +185,7 @@
       var offset = Draggable.getOffset(event.target);
       var x = event.clientX - offset.x;
       var y = event.clientY - offset.y;
-      var p = this.createPointer(IDENTIFIER_MOUSE, event);
+      var p = this.createPointer(Draggable.IDENTIFIER_MOUSE, event);
       this.addPointer(p);
       this.onstart.call(null, x, y, event, p.context);
       document.addEventListener('mousemove', this.onmousemove);
@@ -193,14 +193,14 @@
     };
 
     Draggable.prototype.onmousemove = function(event) {
-      var p = this.findPointer(IDENTIFIER_MOUSE);
+      var p = this.findPointer(Draggable.IDENTIFIER_MOUSE);
       var dx = event.pageX - p.startPageX + p.dScrollX;
       var dy = event.pageY - p.startPageY + p.dScrollY;
       this.onmove.call(null, dx, dy, event, p.context);
     };
 
     Draggable.prototype.onmouseup = function(event) {
-      var p = this.findPointer(IDENTIFIER_MOUSE);
+      var p = this.findPointer(Draggable.IDENTIFIER_MOUSE);
       var dx = event.pageX - p.startPageX + p.dScrollX;
       var dy = event.pageY - p.startPageY + p.dScrollY;
       document.removeEventListener('mousemove', this.onmousemove);
