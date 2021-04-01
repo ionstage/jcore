@@ -111,7 +111,7 @@
     };
 
     Draggable.prototype.createPointer = function(identifier, event) {
-      var scroll = Draggable.getScrollOffset(event.target);
+      var scroll = Draggable.getScrollOffset(this.el);
       var onscroll = Draggable.debounce(this.onscroll.bind(this, identifier), 0);
       return new Draggable.Pointer(identifier, event.pageX, event.pageY, scroll, onscroll);
     };
