@@ -95,7 +95,7 @@
       var width = 0;
       var height = 0;
       el = el.parentNode;
-      while (el) {
+      while (el && el !== document && el !== document.documentElement) {
         x += el.scrollLeft || 0;
         y += el.scrollTop || 0;
         width += (el.scrollWidth - el.clientWidth) || 0;
