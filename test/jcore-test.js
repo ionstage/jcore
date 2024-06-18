@@ -284,6 +284,21 @@ describe('Draggable', function() {
     });
   });
 
+  it('should stop dragging on contextmenu event', function() {
+    var el = document.createElement('div');
+    var d = new Draggable(new Component(el));
+    d._draggable.enable({ onstart: () => {}, onmove: () => {}, onend: sinon.spy() });
+
+    var ev = document.createEvent('Event');
+    ev.initEvent('mousedown', true, true);
+    el.dispatchEvent(ev);
+
+    ev = document.createEvent('Event');
+    ev.initEvent('contextmenu', true, true);
+    document.dispatchEvent(ev);
+    assert(d._draggable.onend.called);
+  });
+
   describe('#enable', function() {
     it('should enable event listeners of draggable', function() {
       var d = new Draggable(new Component());
