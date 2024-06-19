@@ -1,5 +1,5 @@
 /**
- * jCore v0.4.7
+ * jCore v0.4.8
  * (c) 2016 iOnStage
  * Released under the MIT License.
  */
